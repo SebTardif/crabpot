@@ -2,6 +2,8 @@
 
 ## 0.2.2 - Unreleased
 
+- Time out hung `npm audit` spawnSync calls in the fixture-security check instead of blocking CI when the registry stalls.
+
 - Failed npm fixture packs now stop materialization and dependent checks after collecting availability evidence, including when report writing is disabled; successful pinned fallbacks remain supported. Availability reports now label the resolved CLI or environment fixture selection.
 - Adopted the inspector source repair for credential-free model-auth registration capture; published-package smoke remains on the older 0.3.24 release.
 - Removed the obsolete bundled QQ Bot source fixture that blocked development dashboard materialization after OpenClaw externalized the plugin; retained the Tencent QQbot git fixture and its channel/tool coverage.

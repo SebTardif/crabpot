@@ -6,15 +6,15 @@ Generated: deterministic
 
 | Metric              | Value |
 | ------------------- | ----- |
-| Fixtures            | 60    |
-| Probes              | 511   |
+| Fixtures            | 59    |
+| Probes              | 507   |
 | Hook probes         | 129   |
-| Registration probes | 382   |
-| Ready               | 501   |
+| Registration probes | 378   |
+| Ready               | 497   |
 | Blocked             | 10    |
-| Direct execution    | 187   |
+| Direct execution    | 184   |
 | Opt-in execution    | 34    |
-| Metadata-only       | 161   |
+| Metadata-only       | 160   |
 
 ## Probe Inventory
 
@@ -397,10 +397,6 @@ Generated: deterministic
 | memory-lancedb         | registration | registerTool                           | ready   | direct           | plugins/memory-lancedb/.crabpot-package/dist/index.js:147                        | tool name is stable; input schema is captured; result shape metadata is captured                |
 | memory-lancedb         | registration | registerTool                           | ready   | direct           | plugins/memory-lancedb/.crabpot-package/dist/index.js:211                        | tool name is stable; input schema is captured; result shape metadata is captured                |
 | memory-lancedb         | registration | registerTool                           | ready   | direct           | plugins/memory-lancedb/.crabpot-package/dist/index.js:267                        | tool name is stable; input schema is captured; result shape metadata is captured                |
-| openclaw-qqbot         | registration | defineBundledChannelEntry              | ready   | metadata-only    | plugins/openclaw-qqbot/.crabpot-package/dist/index.js:16                         | registration arguments are captured                                                             |
-| openclaw-qqbot         | registration | registerCommand                        | ready   | direct           | plugins/openclaw-qqbot/.crabpot-package/dist/channel-entry-C5YdhX3Y.js:111       | command id is stable; interactive command payload is captured                                   |
-| openclaw-qqbot         | registration | registerTool                           | ready   | direct           | plugins/openclaw-qqbot/.crabpot-package/dist/tools-UJJ-tLHP.js:263               | tool name is stable; input schema is captured; result shape metadata is captured                |
-| openclaw-qqbot         | registration | registerTool                           | ready   | direct           | plugins/openclaw-qqbot/.crabpot-package/dist/tools-UJJ-tLHP.js:558               | tool name is stable; input schema is captured; result shape metadata is captured                |
 | whatsapp               | registration | createChatChannelPlugin                | ready   | metadata-only    | plugins/whatsapp/.crabpot-package/dist/channel-BeBrHPVa.js:531                   | channel plugin id is stable; channel factory metadata is captured                               |
 | whatsapp               | registration | defineBundledChannelEntry              | ready   | metadata-only    | plugins/whatsapp/.crabpot-package/dist/index.js:9                                | registration arguments are captured                                                             |
 | whatsapp               | registration | registerTool                           | ready   | direct           | plugins/whatsapp/.crabpot-package/dist/agent-tools-api.js:223                    | tool name is stable; input schema is captured; result shape metadata is captured                |

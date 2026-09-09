@@ -10,14 +10,14 @@ Status: PASS
 | Metric                      | Value                                                                                                                     |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | Breakages                   | 0                                                                                                                         |
-| Warnings                    | 121                                                                                                                       |
+| Warnings                    | 122                                                                                                                       |
 | Suggestions                 | 237                                                                                                                       |
-| Issues                      | 358                                                                                                                       |
+| Issues                      | 359                                                                                                                       |
 | P0 issues                   | 9                                                                                                                         |
-| P1 issues                   | 123                                                                                                                       |
+| P1 issues                   | 124                                                                                                                       |
 | Live issues                 | 9                                                                                                                         |
 | Live P0 issues              | 9                                                                                                                         |
-| Compat gaps                 | 107                                                                                                                       |
+| Compat gaps                 | 108                                                                                                                       |
 | Deprecation warnings        | 22                                                                                                                        |
 | Inspector gaps              | 156                                                                                                                       |
 | Upstream metadata           | 64                                                                                                                        |
@@ -33,7 +33,7 @@ Status: PASS
 | Windows portability risks   | 17                                                                                                                        |
 | Container portability risks | 17                                                                                                                        |
 | Jiti loader candidates      | 20                                                                                                                        |
-| Import loop                 | p50 3066 ms / p95 3108 ms / plugin delta RSS 0.7 MB / plugin delta CPU 16 ms / OpenClaw import 129.1 ms / activate 0.5 ms |
+| Import loop                 | p50 2822 ms / p95 2915 ms / plugin delta RSS 1.8 MB / plugin delta CPU 24 ms / OpenClaw import 119.3 ms / activate 0.4 ms |
 
 ## Top Issues
 
@@ -74,8 +74,8 @@ _none_
 
 | Action | ID               | Metric       | Baseline | Current | Message                                    |
 | ------ | ---------------- | ------------ | -------- | ------- | ------------------------------------------ |
-| warn   | profile.wall-p95 | p95WallMs    | 1273     | 5946    | p95WallMs regressed 367.1% over baseline   |
-| warn   | profile.peak-rss | maxPeakRssMb | 65.1     | 213.6   | maxPeakRssMb regressed 148.5 over baseline |
+| warn   | profile.wall-p95 | p95WallMs    | 1273     | 6327    | p95WallMs regressed 397% over baseline     |
+| warn   | profile.peak-rss | maxPeakRssMb | 65.1     | 218     | maxPeakRssMb regressed 152.9 over baseline |
 
 ## Artifacts
 

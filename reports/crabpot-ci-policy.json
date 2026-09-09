@@ -243,7 +243,7 @@
     {
       "id": "compatibility-report.p1-issues",
       "action": "pass",
-      "message": "123 P1 issues tracked",
+      "message": "124 P1 issues tracked",
       "evidence": [
         "a2a-gateway:missing-compat-record",
         "agentchat:missing-compat-record",
@@ -321,6 +321,7 @@
         "mocrane-wecom:missing-compat-record",
         "mocrane-wecom:sdk-export-missing",
         "msteams:missing-compat-record",
+        "msteams:sdk-export-missing",
         "nemoclaw:before-tool-call-probe",
         "nemoclaw:missing-compat-record",
         "nemoclaw:missing-compat-record",

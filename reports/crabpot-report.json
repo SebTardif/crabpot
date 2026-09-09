@@ -559,19 +559,19 @@
     "fixtureCount": 59,
     "highPriorityFixtures": 22,
     "breakageCount": 0,
-    "warningCount": 121,
+    "warningCount": 122,
     "suggestionCount": 237,
-    "decisionCount": 373,
-    "logCount": 335,
-    "issueCount": 358,
-    "openIssueCount": 358,
+    "decisionCount": 374,
+    "logCount": 336,
+    "issueCount": 359,
+    "openIssueCount": 359,
     "p0IssueCount": 9,
-    "p1IssueCount": 123,
+    "p1IssueCount": 124,
     "openP0IssueCount": 9,
-    "openP1IssueCount": 123,
+    "openP1IssueCount": 124,
     "liveIssueCount": 9,
     "liveP0IssueCount": 9,
-    "compatGapCount": 107,
+    "compatGapCount": 108,
     "deprecationWarningCount": 22,
     "inspectorGapCount": 156,
     "upstreamIssueCount": 64,
@@ -580,7 +580,7 @@
     "runtimeCoveredIssueCount": 0,
     "runtimePartiallyCoveredIssueCount": 0,
     "runtimeCoverageArtifactCount": 0,
-    "contractProbeCount": 251
+    "contractProbeCount": 252
   },
   "fixtures": [
     {
@@ -3337,8 +3337,23 @@
           }
         }
       ],
-      "sdkImports": [],
-      "sdkImportDetails": [],
+      "sdkImports": [
+        "openclaw/plugin-sdk/logging-core"
+      ],
+      "sdkImportDetails": [
+        {
+          "specifier": "openclaw/plugin-sdk/logging-core",
+          "file": "plugins/lossless-claw/src/batch-dedup.ts",
+          "line": 65,
+          "ref": "plugins/lossless-claw/src/batch-dedup.ts:65"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/logging-core",
+          "file": "plugins/lossless-claw/src/lcm-file-log.ts",
+          "line": 198,
+          "ref": "plugins/lossless-claw/src/lcm-file-log.ts:198"
+        }
+      ],
       "sdkDeprecations": [
         {
           "code": "sdk-load-session-store",
@@ -12613,8 +12628,1007 @@
           "openclaw": null
         }
       ],
-      "sdkImports": [],
-      "sdkImportDetails": [],
+      "sdkImports": [
+        "openclaw/plugin-sdk/account-helpers",
+        "openclaw/plugin-sdk/account-id",
+        "openclaw/plugin-sdk/agent-runtime",
+        "openclaw/plugin-sdk/allow-from",
+        "openclaw/plugin-sdk/approval-auth-runtime",
+        "openclaw/plugin-sdk/approval-delivery-runtime",
+        "openclaw/plugin-sdk/approval-gateway-runtime",
+        "openclaw/plugin-sdk/approval-handler-adapter-runtime",
+        "openclaw/plugin-sdk/approval-handler-runtime",
+        "openclaw/plugin-sdk/approval-native-runtime",
+        "openclaw/plugin-sdk/approval-runtime",
+        "openclaw/plugin-sdk/blob-runtime",
+        "openclaw/plugin-sdk/channel-actions",
+        "openclaw/plugin-sdk/channel-config-helpers",
+        "openclaw/plugin-sdk/channel-config-schema",
+        "openclaw/plugin-sdk/channel-core",
+        "openclaw/plugin-sdk/channel-entry-contract",
+        "openclaw/plugin-sdk/channel-inbound",
+        "openclaw/plugin-sdk/channel-ingress-runtime",
+        "openclaw/plugin-sdk/channel-outbound",
+        "openclaw/plugin-sdk/channel-pairing",
+        "openclaw/plugin-sdk/channel-policy",
+        "openclaw/plugin-sdk/channel-runtime-context",
+        "openclaw/plugin-sdk/channel-secret-basic-runtime",
+        "openclaw/plugin-sdk/channel-send-result",
+        "openclaw/plugin-sdk/channel-setup",
+        "openclaw/plugin-sdk/channel-status",
+        "openclaw/plugin-sdk/channel-targets",
+        "openclaw/plugin-sdk/collection-runtime",
+        "openclaw/plugin-sdk/context-visibility-runtime",
+        "openclaw/plugin-sdk/dangerous-name-runtime",
+        "openclaw/plugin-sdk/dedupe-runtime",
+        "openclaw/plugin-sdk/directory-runtime",
+        "openclaw/plugin-sdk/error-runtime",
+        "openclaw/plugin-sdk/extension-shared",
+        "openclaw/plugin-sdk/fetch-runtime",
+        "openclaw/plugin-sdk/file-lock",
+        "openclaw/plugin-sdk/gateway-runtime",
+        "openclaw/plugin-sdk/global-singleton",
+        "openclaw/plugin-sdk/html-entity-runtime",
+        "openclaw/plugin-sdk/interactive-runtime",
+        "openclaw/plugin-sdk/keyed-async-queue",
+        "openclaw/plugin-sdk/lazy-runtime",
+        "openclaw/plugin-sdk/markdown-table-runtime",
+        "openclaw/plugin-sdk/media-runtime",
+        "openclaw/plugin-sdk/number-runtime",
+        "openclaw/plugin-sdk/outbound-media",
+        "openclaw/plugin-sdk/plugin-runtime",
+        "openclaw/plugin-sdk/plugin-state-runtime",
+        "openclaw/plugin-sdk/provider-auth",
+        "openclaw/plugin-sdk/provider-auth-runtime",
+        "openclaw/plugin-sdk/provider-http",
+        "openclaw/plugin-sdk/qa-runner-runtime",
+        "openclaw/plugin-sdk/reply-chunking",
+        "openclaw/plugin-sdk/reply-history",
+        "openclaw/plugin-sdk/reply-payload",
+        "openclaw/plugin-sdk/reply-reference",
+        "openclaw/plugin-sdk/retry-runtime",
+        "openclaw/plugin-sdk/routing",
+        "openclaw/plugin-sdk/runtime-config-snapshot",
+        "openclaw/plugin-sdk/runtime-doctor-migrations",
+        "openclaw/plugin-sdk/runtime-env",
+        "openclaw/plugin-sdk/runtime-group-policy",
+        "openclaw/plugin-sdk/runtime-store",
+        "openclaw/plugin-sdk/secret-file",
+        "openclaw/plugin-sdk/secret-file-runtime",
+        "openclaw/plugin-sdk/secret-input",
+        "openclaw/plugin-sdk/session-store-paths",
+        "openclaw/plugin-sdk/setup",
+        "openclaw/plugin-sdk/setup-tools",
+        "openclaw/plugin-sdk/ssrf-policy",
+        "openclaw/plugin-sdk/ssrf-runtime",
+        "openclaw/plugin-sdk/status-helpers",
+        "openclaw/plugin-sdk/string-coerce-runtime",
+        "openclaw/plugin-sdk/string-normalization-runtime",
+        "openclaw/plugin-sdk/text-chunking",
+        "openclaw/plugin-sdk/text-utility-runtime",
+        "openclaw/plugin-sdk/web-media",
+        "openclaw/plugin-sdk/webhook-ingress"
+      ],
+      "sdkImportDetails": [
+        {
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 7,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:7"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "file": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs",
+          "line": 11,
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:11"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 42,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:42"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "file": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs",
+          "line": 5,
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:5"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 18,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:18"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 6,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:6"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 7,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:7"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 17,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:17"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/agent-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 32,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:32"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 24,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:24"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 5,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:5"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 7,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:7"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 6,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:6"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 15,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:15"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-auth-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-delivery-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 20,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:20"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-gateway-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 27,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:27"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-handler-adapter-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 6,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:6"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-handler-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs",
+          "line": 7,
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:7"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-native-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs",
+          "line": 6,
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:6"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-native-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 21,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:21"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/approval-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/approval-card-CPNH_q3P.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-card-CPNH_q3P.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/blob-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 21,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-actions",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 22,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:22"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-config-helpers",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-config-schema",
+          "file": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-core",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 7,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:7"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-core",
+          "file": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs",
+          "line": 1,
+          "ref": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs:1"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-entry-contract",
+          "file": "plugins/msteams/.crabpot-package/dist/index.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/index.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-entry-contract",
+          "file": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-inbound",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 26,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:26"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-ingress-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 28,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:28"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "file": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-pairing",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-pairing",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 4,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:4"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-pairing",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 39,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:39"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 5,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:5"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-runtime-context",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 11,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:11"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-secret-basic-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/secret-contract-api.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/secret-contract-api.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-send-result",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 12,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:12"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-setup",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 11,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:11"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-status",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 28,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:28"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-status",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-targets",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 23,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:23"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/channel-targets",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/collection-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 37,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:37"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/context-visibility-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 29,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:29"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/dangerous-name-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 25,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:25"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/dangerous-name-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/dangerous-name-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 41,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:41"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/dedupe-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 35,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:35"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/directory-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 12,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:12"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/directory-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/directory-contract-api.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/directory-contract-api.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/error-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/adapter.runtime-DDuc7sKJ.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/adapter.runtime-DDuc7sKJ.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/error-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 23,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:23"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/error-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 25,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:25"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/extension-shared",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 33,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:33"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/fetch-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/file-lock",
+          "file": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs",
+          "line": 4,
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:4"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/file-lock",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 12,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:12"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/gateway-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 38,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:38"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/global-singleton",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 22,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:22"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/html-entity-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/reaction-types-zP91Ncwk.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/reaction-types-zP91Ncwk.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/html-entity-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 18,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:18"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/interactive-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/keyed-async-queue",
+          "file": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/lazy-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/lazy-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 7,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:7"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/lazy-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 5,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:5"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/markdown-table-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/media-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 26,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:26"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/media-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/media-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 18,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:18"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 11,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:11"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs",
+          "line": 5,
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:5"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 20,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:20"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/outbound-media",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 15,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:15"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/outbound-media",
+          "file": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs",
+          "line": 12,
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:12"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/plugin-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 34,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:34"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/plugin-state-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 36,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:36"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/provider-auth",
+          "file": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/provider-auth-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs",
+          "line": 4,
+          "ref": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs:4"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/provider-http",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/provider-http",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/provider-http",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 16,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:16"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/qa-runner-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/qa-runner-api.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/qa-runner-api.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/reply-chunking",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 24,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:24"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/reply-history",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 30,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:30"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/reply-payload",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/reply-payload",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/reply-payload",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 16,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:16"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/reply-reference",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 19,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:19"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/retry-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/retry-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 15,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:15"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/routing",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 22,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:22"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/routing",
+          "file": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs",
+          "line": 4,
+          "ref": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs:4"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-config-snapshot",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 31,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:31"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-doctor-migrations",
+          "file": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-env",
+          "file": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-env",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 20,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:20"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-env",
+          "file": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-group-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 26,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:26"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-group-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 11,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:11"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-group-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 40,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:40"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/runtime-store",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-gZTAuFux.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-gZTAuFux.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-file",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 16,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:16"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-file-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 15,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:15"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "file": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "file": "plugins/msteams/.crabpot-package/dist/configured-state.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/configured-state.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 19,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:19"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "file": "plugins/msteams/.crabpot-package/dist/secret-input-C65t6kjM.cjs",
+          "line": 1,
+          "ref": "plugins/msteams/.crabpot-package/dist/secret-input-C65t6kjM.cjs:1"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/session-store-paths",
+          "file": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/setup",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 12,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:12"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/setup-tools",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/ssrf-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/ssrf-policy",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/adapter.runtime-DDuc7sKJ.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/adapter.runtime-DDuc7sKJ.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 10,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:10"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 17,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:17"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 19,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:19"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/status-helpers",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 15,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:15"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/approval-card-CPNH_q3P.cjs",
+          "line": 1,
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-card-CPNH_q3P.cjs:1"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 16,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:16"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs",
+          "line": 4,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:4"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs",
+          "line": 6,
+          "ref": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs:6"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 8,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:8"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs",
+          "line": 3,
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:3"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 6,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:6"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs",
+          "line": 9,
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:9"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs",
+          "line": 2,
+          "ref": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs:2"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-normalization-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/string-normalization-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 18,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:18"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "file": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs",
+          "line": 27,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:27"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "file": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs",
+          "line": 13,
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:13"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 11,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:11"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 19,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:19"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-utility-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 14,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:14"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-utility-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs",
+          "line": 15,
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:15"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/text-utility-runtime",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 21,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:21"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/web-media",
+          "file": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs",
+          "line": 25,
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:25"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/webhook-ingress",
+          "file": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs",
+          "line": 20,
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:20"
+        },
+        {
+          "specifier": "openclaw/plugin-sdk/webhook-ingress",
+          "file": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs",
+          "line": 43,
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:43"
+        }
+      ],
       "sdkDeprecations": []
     },
     {
@@ -34596,6 +35610,16 @@
     },
     {
       "fixture": "msteams",
+      "code": "sdk-export-missing",
+      "message": "fixture imports plugin SDK aliases that are not exported by the target OpenClaw package",
+      "evidence": [
+        "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
+      ],
+      "compatRecord": "plugin-sdk-export-aliases",
+      "level": "warning"
+    },
+    {
+      "fixture": "msteams",
       "code": "package-install-metadata-incomplete",
       "level": "warning",
       "message": "package OpenClaw install metadata does not match advertised release targets",
@@ -39460,6 +40484,25 @@
         "channel.runtime.envelope-config-metadata"
       ],
       "compatRecord": "channel.runtime.envelope-config-metadata",
+      "runtimeCoverage": null
+    },
+    {
+      "id": "CRABPOT-38701C91",
+      "fixture": "msteams",
+      "severity": "P1",
+      "owner": "core",
+      "code": "sdk-export-missing",
+      "decision": "core-compat-adapter",
+      "status": "open",
+      "issueClass": "compat-gap",
+      "live": false,
+      "deprecated": false,
+      "compatStatus": "untracked",
+      "title": "msteams: plugin SDK import aliases are missing from target package exports",
+      "evidence": [
+        "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
+      ],
+      "compatRecord": "plugin-sdk-export-aliases",
       "runtimeCoverage": null
     },
     {
@@ -45574,6 +46617,16 @@
       ]
     },
     {
+      "id": "sdk.import.package-export-cold-import:msteams",
+      "fixture": "msteams",
+      "priority": "P1",
+      "target": "sdk-alias",
+      "contract": "Every observed OpenClaw plugin SDK import remains exported by the target OpenClaw package.",
+      "evidence": [
+        "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
+      ]
+    },
+    {
       "id": "sdk.import.package-export-cold-import:openclaw-telemetry",
       "fixture": "openclaw-telemetry",
       "priority": "P1",
@@ -48650,6 +49703,15 @@
         "registerCommand",
         "registerContextEngine",
         "registerTool"
+      ]
+    },
+    {
+      "fixture": "lossless-claw",
+      "code": "sdk-exports-present",
+      "level": "log",
+      "message": "all observed plugin SDK imports exist in target OpenClaw package exports",
+      "evidence": [
+        "openclaw/plugin-sdk/logging-core"
       ]
     },
     {
@@ -52867,6 +53929,13 @@
       "seam": "registration-capture",
       "action": "Expose or mirror a full public API capture shim before treating these runtime-only seams as covered.",
       "evidence": "registerGatewayMethod"
+    },
+    {
+      "fixture": "msteams",
+      "decision": "core-compat-adapter",
+      "seam": "sdk-alias",
+      "action": "Restore the package export alias or publish a versioned migration map before cold-importing old plugins.",
+      "evidence": "openclaw/plugin-sdk/blob-runtime"
     },
     {
       "fixture": "msteams",

@@ -6742,7 +6742,7 @@
       "execution": {
         "mode": "metadata-only",
         "callableProperties": [],
-        "reason": "transcript source providers are captured as registration metadata before transcript provider runtime execution"
+        "reason": "transcript source providers are captured as registration metadata before live capture or transcript import"
       },
       "source": "plugins/kitchen-sink/scripts/sync-surface.mjs:158"
     },
@@ -6762,7 +6762,7 @@
       "execution": {
         "mode": "metadata-only",
         "callableProperties": [],
-        "reason": "transcript source providers are captured as registration metadata before transcript provider runtime execution"
+        "reason": "transcript source providers are captured as registration metadata before live capture or transcript import"
       },
       "source": "plugins/kitchen-sink/src/generated-registrars.js:54"
     },
@@ -7100,7 +7100,7 @@
       "execution": {
         "mode": "metadata-only",
         "callableProperties": [],
-        "reason": "transcript source providers are captured as registration metadata before transcript provider runtime execution"
+        "reason": "transcript source providers are captured as registration metadata before live capture or transcript import"
       },
       "source": "plugins/discord/.crabpot-package/dist/transcripts-source-api.js:4"
     },
@@ -9318,7 +9318,7 @@
       "execution": {
         "mode": "metadata-only",
         "callableProperties": [],
-        "reason": "transcript source providers are captured as registration metadata before transcript provider runtime execution"
+        "reason": "transcript source providers are captured as registration metadata before live capture or transcript import"
       },
       "source": "plugins/google-meet/.crabpot-package/dist/index.js:173"
     },

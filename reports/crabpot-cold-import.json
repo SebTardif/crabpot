@@ -11,9 +11,9 @@
     "readyCount": 4,
     "blockedCount": 115,
     "tsLoaderRequiredCount": 13,
-    "buildRequiredCount": 9,
+    "buildRequiredCount": 15,
     "dependencyInstallRequiredCount": 64,
-    "sdkAliasRequiredCount": 36
+    "sdkAliasRequiredCount": 40
   },
   "fixtures": [
     {
@@ -319,7 +319,7 @@
           "kind": "runtimeExtension",
           "specifier": "./dist/index.js",
           "path": "plugins/opik-openclaw/dist/index.js",
-          "status": "sdk-alias-required",
+          "status": "build-required",
           "blockers": [
             {
               "code": "build-required",
@@ -566,7 +566,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/bluebubbles/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -694,7 +694,7 @@
           "kind": "setupEntry",
           "specifier": "./setup-entry.ts",
           "path": "plugins/bluebubbles/.crabpot-package/setup-entry.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -872,7 +872,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/discord/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -1102,10 +1102,16 @@
               "code": "missing-entrypoint",
               "message": "entrypoint path is missing in the fixture checkout",
               "evidence": "plugins/msteams/.crabpot-package/index.ts"
+            },
+            {
+              "code": "sdk-alias-required",
+              "message": "fixture imports an SDK alias missing from target OpenClaw package exports",
+              "evidence": "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
             }
           ],
           "assertions": [
-            "plugin package metadata points at an existing OpenClaw entrypoint"
+            "plugin package metadata points at an existing OpenClaw entrypoint",
+            "target OpenClaw exports the imported SDK alias or provides a migration shim"
           ]
         },
         {
@@ -1115,16 +1121,22 @@
           "kind": "runtimeExtension",
           "specifier": "./dist/index.cjs",
           "path": "plugins/msteams/.crabpot-package/dist/index.cjs",
-          "status": "dependency-install-required",
+          "status": "sdk-alias-required",
           "blockers": [
             {
               "code": "dependency-install-required",
               "message": "package declares runtime dependencies that must be installed before cold import",
               "evidence": "@azure/identity, @microsoft/teams.api, @microsoft/teams.apps, express, typebox, zod"
+            },
+            {
+              "code": "sdk-alias-required",
+              "message": "fixture imports an SDK alias missing from target OpenClaw package exports",
+              "evidence": "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
             }
           ],
           "assertions": [
-            "fixture dependencies are installed in an isolated workspace before cold import"
+            "fixture dependencies are installed in an isolated workspace before cold import",
+            "target OpenClaw exports the imported SDK alias or provides a migration shim"
           ]
         },
         {
@@ -1134,16 +1146,22 @@
           "kind": "setupEntry",
           "specifier": "./dist/setup-entry.cjs",
           "path": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs",
-          "status": "dependency-install-required",
+          "status": "sdk-alias-required",
           "blockers": [
             {
               "code": "dependency-install-required",
               "message": "package declares runtime dependencies that must be installed before cold import",
               "evidence": "@azure/identity, @microsoft/teams.api, @microsoft/teams.apps, express, typebox, zod"
+            },
+            {
+              "code": "sdk-alias-required",
+              "message": "fixture imports an SDK alias missing from target OpenClaw package exports",
+              "evidence": "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
             }
           ],
           "assertions": [
-            "fixture dependencies are installed in an isolated workspace before cold import"
+            "fixture dependencies are installed in an isolated workspace before cold import",
+            "target OpenClaw exports the imported SDK alias or provides a migration shim"
           ]
         },
         {
@@ -1153,16 +1171,22 @@
           "kind": "runtimeSetupEntry",
           "specifier": "./dist/setup-entry.cjs",
           "path": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs",
-          "status": "dependency-install-required",
+          "status": "sdk-alias-required",
           "blockers": [
             {
               "code": "dependency-install-required",
               "message": "package declares runtime dependencies that must be installed before cold import",
               "evidence": "@azure/identity, @microsoft/teams.api, @microsoft/teams.apps, express, typebox, zod"
+            },
+            {
+              "code": "sdk-alias-required",
+              "message": "fixture imports an SDK alias missing from target OpenClaw package exports",
+              "evidence": "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
             }
           ],
           "assertions": [
-            "fixture dependencies are installed in an isolated workspace before cold import"
+            "fixture dependencies are installed in an isolated workspace before cold import",
+            "target OpenClaw exports the imported SDK alias or provides a migration shim"
           ]
         }
       ]
@@ -1594,7 +1618,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/feishu/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -1700,7 +1724,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/tlon/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -2026,7 +2050,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/brave-plugin/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -2076,7 +2100,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/codex/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -2406,7 +2430,7 @@
           "kind": "extension",
           "specifier": "./index.ts",
           "path": "plugins/diffs/.crabpot-package/index.ts",
-          "status": "sdk-alias-required",
+          "status": "missing",
           "blockers": [
             {
               "code": "missing-entrypoint",
@@ -2613,7 +2637,7 @@
           "kind": "extension",
           "specifier": "./dist/index.js",
           "path": "plugins/memory-tencentdb/.crabpot-package/openclaw-plugin/dist/index.js",
-          "status": "sdk-alias-required",
+          "status": "build-required",
           "blockers": [
             {
               "code": "build-required",
@@ -2712,7 +2736,7 @@
           "kind": "extension",
           "specifier": "./dist/index.mjs",
           "path": "plugins/dingtalk-connector/dist/index.mjs",
-          "status": "sdk-alias-required",
+          "status": "build-required",
           "blockers": [
             {
               "code": "build-required",
@@ -2743,7 +2767,7 @@
           "kind": "extension",
           "specifier": "./dist/index.mjs",
           "path": "plugins/dingtalk-doc/dist/index.mjs",
-          "status": "sdk-alias-required",
+          "status": "build-required",
           "blockers": [
             {
               "code": "build-required",
@@ -2980,7 +3004,7 @@
           "kind": "extension",
           "specifier": "./dist/index.js",
           "path": "plugins/telnyx-sms/dist/index.js",
-          "status": "sdk-alias-required",
+          "status": "build-required",
           "blockers": [
             {
               "code": "build-required",
@@ -3005,7 +3029,7 @@
           "kind": "setupEntry",
           "specifier": "./dist/setup-entry.js",
           "path": "plugins/telnyx-sms/dist/setup-entry.js",
-          "status": "sdk-alias-required",
+          "status": "build-required",
           "blockers": [
             {
               "code": "build-required",

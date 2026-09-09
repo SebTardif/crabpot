@@ -75,8 +75,11 @@ export function validateManifest(manifest) {
     }
     ids.add(fixture.id);
 
-    if (!fixture.path?.startsWith("plugins/")) {
+    if (!isRelativePathWithin(fixture.path, "plugins")) {
       errors.push(`${fixture.id}: path must live under plugins/`);
+    }
+    if (fixture.subdir !== undefined && !isRelativePathWithin(fixture.subdir, ".")) {
+      errors.push(`${fixture.id}: subdir must live strictly beneath the fixture checkout`);
     }
     if (paths.has(fixture.path)) {
       errors.push(`duplicate fixture path: ${fixture.path}`);
@@ -197,4 +200,16 @@ export function fixtureSourceRoot(fixture) {
     return path.join(checkoutPath, npmPackagePayloadDir);
   }
   return checkoutPath;
+}
+
+function isRelativePathWithin(value, parent) {
+  if (typeof value !== "string" || !value || value.includes("\\") || value.includes("\0") || /^[a-z]:/i.test(value)) {
+    return false;
+  }
+  const normalized = path.posix.normalize(value);
+  if (path.posix.isAbsolute(normalized) || /^[a-z]:/i.test(normalized)) {
+    return false;
+  }
+  const relative = path.posix.relative(parent, normalized);
+  return relative !== "" && relative !== ".." && !relative.startsWith("../");
 }

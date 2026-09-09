@@ -4,8 +4,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "./manifest-lib.mjs";
 
-export const pluginInspectorRef = "84ede904fd6e766a9fc4de002f39af87d90c1916";
-export const pluginInspectorPackage = "@openclaw/plugin-inspector@0.3.24";
+export const pluginInspectorRef = "2e21b3b48aa06fea30b08202f4c6be13c1f3216a";
+export const pluginInspectorPackage = "@openclaw/plugin-inspector@0.3.25";
 const defaultGitTimeoutMs = 2 * 60 * 1000;
 const defaultNpmTimeoutMs = 2 * 60 * 1000;
 export const defaultPluginInspectorTimeoutMs = 10 * 60 * 1000;

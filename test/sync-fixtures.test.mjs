@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { chmod, cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from "node:fs/promises";
+import { chmod, cp, lstat, mkdir, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { pathToFileURL } from "node:url";
 import { resolvePluginInspectorCliPath } from "../scripts/plugin-inspector-source.mjs";
 
 const repoRoot = path.resolve(import.meta.dirname, "..");
@@ -53,6 +54,11 @@ async function controlledNpm() {
       if (!step.fail) {
         fs.copyFileSync(step.tarball, path.join(args[3], "fixture.tgz"));
       }
+      if (step.redirectCheckout) {
+        const checkout = path.join(process.cwd(), step.redirectCheckout.path);
+        fs.rmSync(checkout, { recursive: true });
+        fs.symlinkSync(step.redirectCheckout.target, checkout, process.platform === "win32" ? "junction" : "dir");
+      }
     }
   } catch (error) {
     plan.unexpected = error.message;
@@ -68,8 +74,10 @@ async function controlledNpm() {
 }
 
 async function miniatureRepo(t, fixtures, steps = []) {
-  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), "crabpot-materialize-test-")));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  const sandbox = await realpath(await mkdtemp(path.join(os.tmpdir(), "crabpot-materialize-test-")));
+  const root = path.join(sandbox, "repo");
+  t.after(() => rm(sandbox, { recursive: true, force: true }));
+  await mkdir(root);
   await cp(path.join(repoRoot, "scripts"), path.join(root, "scripts"), { recursive: true });
   for (const directory of ["bin", "tmp", "home"]) {
     await mkdir(path.join(root, directory));
@@ -79,6 +87,9 @@ async function miniatureRepo(t, fixtures, steps = []) {
   await json("crabpot.ci-policy.json", { fixtureSets: {} });
   for (const item of fixtures) {
     await mkdir(path.join(root, item.path), { recursive: true });
+    if (!item.package) {
+      continue;
+    }
     await json(`${item.path}/package.json`, {
       name: `fixture-shim-${item.id}`,
       version: "0.0.0",
@@ -96,6 +107,10 @@ async function miniatureRepo(t, fixtures, steps = []) {
       name: step.name, version: step.version, type: "module", main: "index.mjs",
     }));
     await writeFile(path.join(archiveRoot, "package/index.mjs"), 'export const marker = "inert";\n');
+    if (step.metadataLink) {
+      await symlink(step.metadataLink, path.join(archiveRoot, "package/.crabpot-source.json"), "file");
+      assert.equal((await lstat(path.join(archiveRoot, "package/.crabpot-source.json"))).isSymbolicLink(), true);
+    }
     step.tarball = path.join(archiveRoot, "fixture.tgz");
     const tar = spawnSync("tar", ["-czf", "fixture.tgz", "package"], { cwd: archiveRoot, encoding: "utf8" });
     assert.equal(tar.status, 0, tar.stderr);
@@ -108,6 +123,17 @@ async function miniatureRepo(t, fixtures, steps = []) {
   const npm = path.join(root, "bin", process.platform === "win32" ? "npm.cmd" : "npm");
   await writeFile(npm, launcher);
   await chmod(npm, 0o755);
+  // Invalid-destination tests must never reach npm, git, or tar, even before the repair.
+  await writeFile(path.join(root, "deny-commands.mjs"), [
+    'import fs from "node:fs";',
+    'import childProcess from "node:child_process";',
+    'import { syncBuiltinESMExports } from "node:module";',
+    'childProcess.spawnSync = (command, args) => {',
+    '  fs.appendFileSync("external-calls.jsonl", `${JSON.stringify([command, ...args])}\\n`);',
+    '  throw new Error("unexpected external command");',
+    '};',
+    'syncBuiltinESMExports();',
+  ].join("\n"));
   // Do not inherit track selection, credentials, npm config or Node injection from CI.
   const env = Object.fromEntries(Object.entries(process.env).filter(([key]) =>
     ["PATH", "SYSTEMROOT", "WINDIR", "COMSPEC", "PATHEXT"].includes(key.toUpperCase()),
@@ -121,8 +147,8 @@ async function miniatureRepo(t, fixtures, steps = []) {
     TMP: path.join(root, "tmp"),
     TEMP: path.join(root, "tmp"),
   });
-  const run = (script = "sync-fixtures.mjs", args = ["--materialize"], extraEnv = {}) => {
-    const result = spawnSync(process.execPath, [`scripts/${script}`, ...args], {
+  const run = (script = "sync-fixtures.mjs", args = ["--materialize"], extraEnv = {}, nodeArgs = []) => {
+    const result = spawnSync(process.execPath, [...nodeArgs, `scripts/${script}`, ...args], {
       cwd: root, env: { ...env, ...extraEnv }, encoding: "utf8", timeout: 30_000,
     });
     assert.ifError(result.error);
@@ -131,8 +157,17 @@ async function miniatureRepo(t, fixtures, steps = []) {
   };
   return {
     root, json, run,
-    payload: (item = fixtures[0]) => path.join(root, item.path, ".crabpot-package"),
+    outside: path.join(sandbox, "outside"),
+    payload: (item = fixtures[0]) => path.join(root, item.path, item.subdir ?? (item.package ? ".crabpot-package" : "")),
     readJson: async (file) => JSON.parse(await readFile(path.join(root, file), "utf8")),
+    runWithoutCommands: (args = ["--materialize"]) =>
+      run("sync-fixtures.mjs", args, {}, ["--import", pathToFileURL(path.join(root, "deny-commands.mjs")).href]),
+    async assertNoExternalCommands() {
+      assert.equal(existsSync(path.join(root, "external-calls.jsonl")), false, "preflight must precede every external command");
+      assert.deepEqual((JSON.parse(await readFile(path.join(root, "npm-plan.json"), "utf8"))).calls, []);
+      assert.deepEqual(await readdir(path.join(root, "tmp")), []);
+      assert.equal(existsSync(path.join(root, availabilityPath)), false);
+    },
     async assertNpmComplete() {
       const plan = JSON.parse(await readFile(path.join(root, "npm-plan.json"), "utf8"));
       assert.equal(plan.unexpected, undefined);
@@ -147,6 +182,240 @@ function assertFailedAcquisition(result) {
   assert.notEqual(result.status, 0, `failed npm pack must fail the materializer:\n${result.stdout}`);
   assert.match(result.stderr, /ETARGET/);
   assert.doesNotMatch(result.stdout, /fixtures materialized/);
+}
+
+function sourcePackFixture() {
+  const item = fixture("source", "@openclaw/fixture");
+  item.package.artifactSource = "source-pack";
+  item.source = { repo: "https://github.com/openclaw/openclaw.git", path: "extensions/fixture", ref: sourceRef };
+  return item;
+}
+
+async function sourcePackArgs(repo, item) {
+  const sourceRoot = path.join(repo.root, "host");
+  await mkdir(path.join(sourceRoot, item.source.path), { recursive: true });
+  await repo.json("host/package.json", { name: "inert-host", version: "1.0.0" });
+  await repo.json(`host/${item.source.path}/package.json`, { name: item.package.name, version: "1.2.3" });
+  return ["--materialize", "--openclaw", sourceRoot];
+}
+
+async function directoryBytes(root) {
+  const entries = (await readdir(root, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name));
+  return Object.fromEntries(await Promise.all(entries.map(async (entry) => [
+    entry.name,
+    entry.isDirectory()
+      ? await directoryBytes(path.join(root, entry.name))
+      : await readFile(path.join(root, entry.name)),
+  ])));
+}
+
+async function redirectDestination(repo, relativePath, kind = "link") {
+  const destination = path.join(repo.root, relativePath);
+  await mkdir(destination, { recursive: true });
+  await writeFile(path.join(destination, "sentinel.txt"), "destination bytes must survive\n");
+  await cp(destination, repo.outside, { recursive: true });
+  await rm(destination, { recursive: true });
+  if (kind === "file") {
+    await writeFile(destination, "not a directory\n");
+  } else {
+    const target = kind === "dangling" ? path.join(repo.outside, "missing") : repo.outside;
+    await symlink(target, destination, process.platform === "win32" ? "junction" : "dir");
+    assert.equal((await lstat(destination)).isSymbolicLink(), true);
+  }
+  return destination;
+}
+
+function assertDestinationRejected(result, diagnostic) {
+  assert.notEqual(result.status, 0, "unsafe destination must fail materialization");
+  assert.doesNotMatch(result.stdout, /fixtures materialized/);
+  assert.match(result.stderr, diagnostic);
+}
+
+for (const acquisition of ["npm", "source-pack", "git"]) {
+  for (const component of ["plugins", "checkout parent", "checkout", "subdir parent", "payload"]) {
+    test(`${acquisition} rejects a ${component} link before materialization`, async (t) => {
+      const item = acquisition === "source-pack" ? sourcePackFixture() : fixture();
+      if (acquisition === "git") {
+        delete item.package;
+        item.repo = "https://github.com/openclaw/example.git";
+      }
+      item.path = "plugins/group/fixture";
+      item.subdir = "nested/payload";
+      const repo = await miniatureRepo(t, [item]);
+      const args = acquisition === "source-pack" ? await sourcePackArgs(repo, item) : ["--materialize"];
+      const destinations = {
+        plugins: "plugins",
+        "checkout parent": "plugins/group",
+        checkout: item.path,
+        "subdir parent": `${item.path}/nested`,
+        payload: `${item.path}/${item.subdir}`,
+      };
+      await redirectDestination(repo, destinations[component]);
+      const before = await directoryBytes(repo.outside);
+      const result = repo.runWithoutCommands(args);
+      await repo.assertNoExternalCommands();
+      assert.deepEqual(await directoryBytes(repo.outside), before);
+      assertDestinationRejected(result, /symlink|symbolic link|junction/i);
+    });
+  }
+}
+
+for (const kind of ["dangling", "file"]) {
+  for (const component of ["plugins", "checkout parent", "checkout", "subdir parent", "payload"]) {
+    test(`materialization rejects a ${kind} ${component}`, async (t) => {
+      const item = fixture();
+      item.path = "plugins/group/fixture";
+      item.subdir = "nested/payload";
+      const repo = await miniatureRepo(t, [item]);
+      const destinations = {
+        plugins: "plugins",
+        "checkout parent": "plugins/group",
+        checkout: item.path,
+        "subdir parent": `${item.path}/nested`,
+        payload: `${item.path}/${item.subdir}`,
+      };
+      const destination = await redirectDestination(repo, destinations[component], kind);
+      const before = await directoryBytes(repo.outside);
+      const result = repo.runWithoutCommands();
+      await repo.assertNoExternalCommands();
+      assert.deepEqual(await directoryBytes(repo.outside), before);
+      if (kind === "file") {
+        assert.equal(await readFile(destination, "utf8"), "not a directory\n");
+      } else {
+        assert.equal((await lstat(destination)).isSymbolicLink(), true);
+      }
+      assertDestinationRejected(result, kind === "file" ? /directory/i : /symlink|symbolic link|junction/i);
+    });
+  }
+}
+
+test("materialization preflights all selected fixtures before starting the first acquisition", async (t) => {
+  const ready = fixture("ready", "ready-plugin");
+  const unsafe = fixture("unsafe", "unsafe-plugin");
+  const repo = await miniatureRepo(t, [ready, unsafe]);
+  await redirectDestination(repo, `${unsafe.path}/.crabpot-package`);
+  const before = await directoryBytes(repo.outside);
+  const result = repo.runWithoutCommands();
+  await repo.assertNoExternalCommands();
+  assert.equal(existsSync(repo.payload(ready)), false);
+  assert.deepEqual(await directoryBytes(repo.outside), before);
+  assertDestinationRejected(result, /symlink|symbolic link|junction/i);
+});
+
+test("materialization does not inspect destinations outside the selected fixture set", async (t) => {
+  const ready = fixture("ready", "ready-plugin");
+  const unselected = fixture("unselected", "unselected-plugin");
+  const repo = await miniatureRepo(t, [ready, unselected], [view(ready), pack(ready)]);
+  await redirectDestination(repo, unselected.path);
+  const before = await directoryBytes(repo.outside);
+  const result = repo.run("sync-fixtures.mjs", ["--materialize", "--fixture-set", ready.id]);
+  await repo.assertNpmComplete();
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal((await repo.readJson(`${ready.path}/.crabpot-package/package.json`)).name, ready.package.name);
+  assert.deepEqual(await directoryBytes(repo.outside), before);
+});
+
+for (const unsafe of [
+  { path: "plugins/." },
+  { path: "plugins/../outside" },
+  { subdir: "." },
+  { subdir: "../../../outside" },
+  { subdir: "nested\\..\\..\\outside" },
+]) {
+  test(`CLI rejects lexical destination ${JSON.stringify(unsafe)} without acquisition`, async (t) => {
+    const item = fixture();
+    const repo = await miniatureRepo(t, [item]);
+    await mkdir(repo.outside);
+    await writeFile(path.join(repo.outside, "sentinel.txt"), "outside bytes\n");
+    // Write hostile metadata only after safe setup; the harness must not resolve it itself.
+    await repo.json("crabpot.config.json", {
+      version: 1, submoduleRoot: "plugins", fixtures: [{ ...item, ...unsafe }],
+    });
+    const before = await directoryBytes(repo.outside);
+    const result = repo.runWithoutCommands();
+    await repo.assertNoExternalCommands();
+    assert.deepEqual(await directoryBytes(repo.outside), before);
+    assertDestinationRejected(result, /path|subdir/i);
+  });
+}
+
+for (const acquisition of ["npm", "source-pack"]) {
+  test(`${acquisition} rechecks the checkout after packing before replacing the payload`, async (t) => {
+    const item = acquisition === "source-pack" ? sourcePackFixture() : fixture();
+    const repo = await miniatureRepo(t, [item], acquisition === "npm" ? [view(item), pack(item)] : [pack(item)]);
+    const args = acquisition === "source-pack" ? await sourcePackArgs(repo, item) : ["--materialize"];
+    await cp(path.join(repo.root, item.path), repo.outside, { recursive: true });
+    await mkdir(path.join(repo.outside, ".crabpot-package"));
+    await writeFile(path.join(repo.outside, ".crabpot-package/sentinel.txt"), "outside payload must survive\n");
+    const before = await directoryBytes(repo.outside);
+    const plan = await repo.readJson("npm-plan.json");
+    const packStep = plan.steps.at(-1);
+    if (acquisition === "source-pack") {
+      packStep.spec = path.join(args[2], item.source.path);
+    }
+    // A controlled pack completion changes the filesystem; this is not a concurrent-race proof.
+    packStep.redirectCheckout = { path: item.path, target: repo.outside };
+    await repo.json("npm-plan.json", plan);
+    const result = repo.run("sync-fixtures.mjs", args);
+    await repo.assertNpmComplete();
+    assert.deepEqual(await directoryBytes(repo.outside), before);
+    assertDestinationRejected(result, /symlink|symbolic link|junction/i);
+  });
+
+  test(`${acquisition} refuses a metadata leaf symlink introduced by the archive`, async (t) => {
+    const item = acquisition === "source-pack" ? sourcePackFixture() : fixture();
+    const packed = { ...pack(item), metadataLink: "../../../../outside/sentinel.txt" };
+    const repo = await miniatureRepo(t, [item], acquisition === "npm" ? [view(item), packed] : [packed]);
+    const args = acquisition === "source-pack" ? await sourcePackArgs(repo, item) : ["--materialize"];
+    if (acquisition === "source-pack") {
+      const plan = await repo.readJson("npm-plan.json");
+      plan.steps[0].spec = path.join(args[2], item.source.path);
+      await repo.json("npm-plan.json", plan);
+    }
+    await mkdir(repo.outside);
+    await writeFile(path.join(repo.outside, "sentinel.txt"), "outside metadata must survive\n");
+    const before = await directoryBytes(repo.outside);
+    // MSYS tar otherwise copies the link target instead of creating a native Windows symlink.
+    const env = process.platform === "win32" ? { MSYS: "winsymlinks:nativestrict" } : {};
+    const result = repo.run("sync-fixtures.mjs", args, env);
+    await repo.assertNpmComplete();
+    assert.equal((await lstat(path.join(repo.payload(), ".crabpot-source.json"))).isSymbolicLink(), true);
+    assert.deepEqual(await directoryBytes(repo.outside), before);
+    assertDestinationRejected(result, /symlink|symbolic link|junction/i);
+  });
+}
+
+for (const state of ["nested npm", "empty payload", "missing checkout", "missing plugins"]) {
+  test(`materialization accepts healthy ${state} destinations`, async (t) => {
+    const sourcePack = state.startsWith("missing");
+    const item = sourcePack ? sourcePackFixture() : fixture();
+    item.path = "plugins/group/fixture..name";
+    item.subdir = "nested/..harmless/payload";
+    const repo = await miniatureRepo(t, [item], sourcePack ? [pack(item)] : [view(item), pack(item)]);
+    const args = sourcePack ? await sourcePackArgs(repo, item) : ["--materialize"];
+    if (sourcePack) {
+      const plan = await repo.readJson("npm-plan.json");
+      plan.steps[0].spec = path.join(args[2], item.source.path);
+      await repo.json("npm-plan.json", plan);
+      await rm(path.join(repo.root, state === "missing plugins" ? "plugins" : item.path), { recursive: true });
+    } else {
+      if (state === "empty payload") {
+        await mkdir(repo.payload(), { recursive: true });
+      }
+      await mkdir(repo.outside);
+      await writeFile(path.join(repo.outside, "sentinel.txt"), "unrelated link target\n");
+      await symlink(repo.outside, path.join(repo.root, item.path, "unrelated"), process.platform === "win32" ? "junction" : "dir");
+    }
+    const result = repo.run("sync-fixtures.mjs", args);
+    await repo.assertNpmComplete();
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /fixtures materialized/);
+    assert.equal((await repo.readJson(`${item.path}/${item.subdir}/package.json`)).name, item.package.name);
+    assert.equal((await repo.readJson(`${item.path}/${item.subdir}/.crabpot-source.json`)).sourceMode, sourcePack ? "source-pack" : "npm");
+    if (!sourcePack) {
+      assert.equal(await readFile(path.join(repo.outside, "sentinel.txt"), "utf8"), "unrelated link target\n");
+    }
+  });
 }
 
 for (const state of ["absent", "empty", "stale"]) {

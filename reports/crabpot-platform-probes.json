@@ -214,7 +214,7 @@
     {
       "fixture": "opik-openclaw",
       "id": "cold-import.runtimeExtension:opik-openclaw:plugins-opik-openclaw-dist-index-js",
-      "status": "sdk-alias-required",
+      "status": "build-required",
       "entrypoint": "plugins/opik-openclaw/dist/index.js",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -400,7 +400,7 @@
     {
       "fixture": "bluebubbles",
       "id": "cold-import.extension:bluebubbles:plugins-bluebubbles-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/bluebubbles/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -436,7 +436,7 @@
     {
       "fixture": "bluebubbles",
       "id": "cold-import.setupEntry:bluebubbles:plugins-bluebubbles-crabpot-package-setup-entry-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/bluebubbles/.crabpot-package/setup-entry.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -508,7 +508,7 @@
     {
       "fixture": "discord",
       "id": "cold-import.extension:discord:plugins-discord-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/discord/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -674,7 +674,7 @@
     {
       "fixture": "msteams",
       "id": "cold-import.runtimeExtension:msteams:plugins-msteams-crabpot-package-dist-index-cjs",
-      "status": "dependency-install-required",
+      "status": "sdk-alias-required",
       "entrypoint": "plugins/msteams/.crabpot-package/dist/index.cjs",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -692,7 +692,7 @@
     {
       "fixture": "msteams",
       "id": "cold-import.setupEntry:msteams:plugins-msteams-crabpot-package-dist-setup-entry-cjs",
-      "status": "dependency-install-required",
+      "status": "sdk-alias-required",
       "entrypoint": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -710,7 +710,7 @@
     {
       "fixture": "msteams",
       "id": "cold-import.runtimeSetupEntry:msteams:plugins-msteams-crabpot-package-dist-setup-entry-cjs",
-      "status": "dependency-install-required",
+      "status": "sdk-alias-required",
       "entrypoint": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1088,7 +1088,7 @@
     {
       "fixture": "feishu",
       "id": "cold-import.extension:feishu:plugins-feishu-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/feishu/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1160,7 +1160,7 @@
     {
       "fixture": "tlon",
       "id": "cold-import.extension:tlon:plugins-tlon-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/tlon/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1416,7 +1416,7 @@
     {
       "fixture": "brave-plugin",
       "id": "cold-import.extension:brave-plugin:plugins-brave-plugin-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/brave-plugin/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1452,7 +1452,7 @@
     {
       "fixture": "codex",
       "id": "cold-import.extension:codex:plugins-codex-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/codex/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1560,7 +1560,7 @@
     {
       "fixture": "diffs",
       "id": "cold-import.extension:diffs:plugins-diffs-crabpot-package-index-ts",
-      "status": "sdk-alias-required",
+      "status": "missing",
       "entrypoint": "plugins/diffs/.crabpot-package/index.ts",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1722,7 +1722,7 @@
     {
       "fixture": "memory-tencentdb",
       "id": "cold-import.extension:memory-tencentdb:plugins-memory-tencentdb-crabpot-package-openclaw-plugin-dist-index-js",
-      "status": "sdk-alias-required",
+      "status": "build-required",
       "entrypoint": "plugins/memory-tencentdb/.crabpot-package/openclaw-plugin/dist/index.js",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1778,7 +1778,7 @@
     {
       "fixture": "dingtalk-connector",
       "id": "cold-import.extension:dingtalk-connector:plugins-dingtalk-connector-dist-index-mjs",
-      "status": "sdk-alias-required",
+      "status": "build-required",
       "entrypoint": "plugins/dingtalk-connector/dist/index.mjs",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1796,7 +1796,7 @@
     {
       "fixture": "dingtalk-doc",
       "id": "cold-import.extension:dingtalk-doc:plugins-dingtalk-doc-dist-index-mjs",
-      "status": "sdk-alias-required",
+      "status": "build-required",
       "entrypoint": "plugins/dingtalk-doc/dist/index.mjs",
       "packageManager": "pnpm",
       "loaderSource": "native-node",
@@ -1962,7 +1962,7 @@
     {
       "fixture": "telnyx-sms",
       "id": "cold-import.extension:telnyx-sms:plugins-telnyx-sms-dist-index-js",
-      "status": "sdk-alias-required",
+      "status": "build-required",
       "entrypoint": "plugins/telnyx-sms/dist/index.js",
       "packageManager": "npm",
       "loaderSource": "native-node",
@@ -1980,7 +1980,7 @@
     {
       "fixture": "telnyx-sms",
       "id": "cold-import.setupEntry:telnyx-sms:plugins-telnyx-sms-dist-setup-entry-js",
-      "status": "sdk-alias-required",
+      "status": "build-required",
       "entrypoint": "plugins/telnyx-sms/dist/setup-entry.js",
       "packageManager": "npm",
       "loaderSource": "native-node",

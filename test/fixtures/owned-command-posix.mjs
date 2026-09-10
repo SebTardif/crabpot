@@ -12,7 +12,7 @@ const receipt = (name, value) => {
   renameSync(`${target}.pending`, target);
 };
 
-if (mode === "overflow") {
+if (mode === "overflow" || mode === "timeout") {
   setTimeout(() => process.exit(98), 15_000).unref();
   const server = createServer({ allowHalfOpen: true }, (socket) => {
     socket.once("end", () => process.exit(0));
@@ -20,7 +20,7 @@ if (mode === "overflow") {
   });
   await new Promise((resolve) => server.listen(path.join(root, "rescue.sock"), resolve));
   receipt("command.json", { pid: process.pid });
-  process.stdout.write(Buffer.alloc(65, "a"));
+  if (mode === "overflow") process.stdout.write(Buffer.alloc(65, "a"));
 } else if (mode === "gated-child") {
   const deadline = Date.now() + 12_000;
   const timer = setInterval(() => {

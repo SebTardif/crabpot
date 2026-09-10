@@ -59,34 +59,42 @@ export function runOwnedCommand(command, args, options = {}) {
   let deadline = started + startupMs;
   let running = false;
   let result;
+  let firstFailure;
+  const receive = (packet) => {
+    if (packet?.type === "ready") {
+      running = true;
+      deadline = performance.now() + timeout + cleanupMs;
+    } else if (packet?.type === "failure") {
+      firstFailure ??= packet.error;
+    } else if (packet?.type === "result") {
+      result = packet.result;
+      result.error ??= firstFailure;
+    }
+  };
   try {
     while (!result) {
-      const packet = receiveMessageOnPort(port1)?.message;
-      if (packet?.type === "ready") {
-        running = true;
-        deadline = performance.now() + timeout + cleanupMs;
-      } else if (packet?.type === "result") {
-        result = packet.result;
-      }
+      receive(receiveMessageOnPort(port1)?.message);
       if (result) break;
       if (performance.now() >= deadline) {
         Atomics.store(shared, 1, 1);
         port1.postMessage({ type: "stop" });
         const end = performance.now() + cleanupMs;
         while (performance.now() < end) {
-          const late = receiveMessageOnPort(port1)?.message;
-          if (late?.type === "result") { result = late.result; break; }
+          receive(receiveMessageOnPort(port1)?.message);
+          if (result) break;
           Atomics.wait(shared, 0, Atomics.load(shared, 0), 10);
         }
         if (!result) {
-          const pid = Atomics.load(shared, 2);
-          if (process.platform !== "win32" && pid > 0) signalGroup(pid, "SIGKILL");
+          // A cached POSIX group number is not retained authority after Worker loss.
           result = emptyResult();
+          result.cleanupError = {
+            code: "EOWNERCLEANUP", message: "command supervisor terminal cleanup receipt was not observed",
+          };
         }
         if (!result.error || result.error.code === "EOWNERCANCELLED") {
-          result.error = {
+          result.error = firstFailure && firstFailure.code !== "EOWNERCANCELLED" ? firstFailure : {
             code: running ? "EOWNERCLEANUP" : "EOWNERSTART",
-            message: running ? "command supervisor did not complete cleanup" : "command supervisor startup timed out",
+            message: running ? "command supervisor exceeded its deadline" : "command supervisor startup timed out",
           };
         }
         break;
@@ -102,12 +110,20 @@ export function runOwnedCommand(command, args, options = {}) {
     if (process.platform === "win32") {
       const helperPid = Atomics.load(shared, 3);
       const end = performance.now() + cleanupMs;
-      while (helperPid > 0 && processRunning(helperPid) && performance.now() < end) {
-        Atomics.wait(shared, 0, Atomics.load(shared, 0), 10);
+      let helperClosed = helperPid <= 0;
+      let cleanupCause;
+      while (!helperClosed && performance.now() < end) {
+        try { helperClosed = !processRunning(helperPid); } catch (error) {
+          cleanupCause ??= errorData(error);
+        }
+        if (!helperClosed) Atomics.wait(shared, 0, Atomics.load(shared, 0), 10);
       }
-      if (helperPid > 0 && processRunning(helperPid)) {
+      if (!helperClosed) {
         result ??= emptyResult();
-        result.error = { code: "EOWNERCLEANUP", message: "Windows helper closure was not observed" };
+        result.cleanupError = {
+          code: "EOWNERCLEANUP", message: "Windows helper closure was not observed",
+          ...(cleanupCause ? { cause: cleanupCause } : {}),
+        };
       }
     }
   }
@@ -116,6 +132,10 @@ export function runOwnedCommand(command, args, options = {}) {
     result[stream] = value === null ? null : options.encoding
       ? Buffer.from(value).toString(options.encoding)
       : Buffer.from(value);
+  }
+  if (result.cleanupError) {
+    const error = result.error ?? result.cleanupError;
+    result.error = { ...error, message: `${error.message}; command cleanup was not confirmed` };
   }
   if (result.error) result.error = Object.assign(new Error(result.error.message), result.error);
   return result;
@@ -185,19 +205,29 @@ async function supervise({ command, args, options, port, shared }) {
   let stop;
   let timer;
   let done = false;
+  let failureSent = false;
+  const recordFailure = (error) => {
+    result.error ??= errorData(error);
+    if (failureSent) return;
+    failureSent = true;
+    port.postMessage({ type: "failure", error: {
+      code: String(result.error.code ?? "EOWNERFAILURE").slice(0, 64),
+      message: String(result.error.message).slice(0, 1024),
+    } });
+    Atomics.add(shared, 0, 1);
+    Atomics.notify(shared, 0);
+  };
+  const fail = (error) => { recordFailure(error); stop?.(); };
   const ready = (pid) => {
     result.pid = pid;
-    Atomics.store(shared, 2, pid);
     port.postMessage({ type: "ready" });
     Atomics.add(shared, 0, 1);
     Atomics.notify(shared, 0);
     timer = setTimeout(() => {
-      result.error ??= { code: "ETIMEDOUT", message: `command timed out after ${options.timeout}ms` };
-      stop();
+      fail({ code: "ETIMEDOUT", message: `command timed out after ${options.timeout}ms` });
     }, options.timeout);
     if (Atomics.load(shared, 1)) stop();
   };
-  const fail = (error) => { result.error ??= errorData(error); stop?.(); };
   const observe = (process) => {
     child = process;
     if (output) {
@@ -220,12 +250,12 @@ async function supervise({ command, args, options, port, shared }) {
   port.on("close", onStop);
   try {
     const execution = process.platform === "win32"
-      ? runWindows(command, args, options, result, observe, ready, fail, shared)
+      ? runWindows(command, args, options, result, observe, ready, fail, shared, recordFailure)
       : runPosix(command, args, options, result, observe, ready, fail);
     stop = execution.stop;
     await execution.completion;
   } catch (error) {
-    result.error ??= errorData(error);
+    recordFailure(error);
   } finally {
     done = true;
     clearTimeout(timer);
@@ -244,13 +274,19 @@ function runPosix(command, args, options, result, observe, ready, fail) {
   let rootExited = false;
   let pipesClosed = false;
   let killed = false;
+  let groupExtinct = false;
+  let cleanupCause;
   let poll;
   let resolve;
   const completion = new Promise((done) => { resolve = done; });
+  const signal = (value) => {
+    if (!child?.pid || groupExtinct) return;
+    try { signalGroup(child.pid, value); } catch (error) { cleanupCause ??= errorData(error); }
+  };
   const stop = () => {
     if (closingAt !== undefined) return;
     closingAt = performance.now();
-    if (child?.pid) signalGroup(child.pid, "SIGTERM");
+    signal("SIGTERM");
   };
   const finish = () => { clearInterval(poll); resolve(); };
   child = spawn(command, args, {
@@ -267,25 +303,30 @@ function runPosix(command, args, options, result, observe, ready, fail) {
     stop();
   });
   child.once("close", () => { pipesClosed = true; });
+  // Probe errors are uncertainty, not extinction; reaping and the deadline must still progress.
   poll = setInterval(() => {
-    try {
-      if (!rootExited && closingAt === undefined) return;
-      const alive = child.pid ? groupRunning(child.pid) : false;
-      if (rootExited && pipesClosed && !alive) return finish();
-      if (closingAt === undefined) return;
-      const elapsed = performance.now() - closingAt;
-      if (!killed && elapsed >= termGraceMs && child.pid) {
-        killed = true;
-        signalGroup(child.pid, "SIGKILL");
+    if (!rootExited && closingAt === undefined) return;
+    if (!groupExtinct) {
+      try { groupExtinct = !child.pid || !groupRunning(child.pid); } catch (error) {
+        cleanupCause ??= errorData(error);
       }
-      if (elapsed >= cleanupMs) {
-        result.error ??= { code: "EOWNERCLEANUP", message: "command group or owned pipes did not close" };
-        child.stdout?.destroy();
-        child.stderr?.destroy();
-        finish();
-      }
-    } catch (error) {
-      fail(error);
+    }
+    if (rootExited && pipesClosed && groupExtinct) return finish();
+    if (closingAt === undefined) return;
+    const elapsed = performance.now() - closingAt;
+    if (!killed && elapsed >= termGraceMs) {
+      killed = true;
+      signal("SIGKILL");
+    }
+    if (elapsed >= cleanupMs) {
+      result.cleanupError = {
+        code: "EOWNERCLEANUP", message: "command group or owned pipe closure was not observed",
+        ...(cleanupCause ? { cause: cleanupCause } : {}),
+      };
+      fail(result.cleanupError);
+      child.stdout?.destroy();
+      child.stderr?.destroy();
+      finish();
     }
   }, 10);
   return { stop, completion };
@@ -332,7 +373,7 @@ function batchCommandLine(executable, args) {
   })].join(" ");
 }
 
-function runWindows(command, args, options, result, observe, ready, fail, shared) {
+function runWindows(command, args, options, result, observe, ready, fail, shared, recordFailure) {
   const pipeName = `crabpot-command-${randomUUID()}`;
   const server = createServer();
   let socket;
@@ -355,14 +396,16 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
     clearTimeout(startupTimer);
     socket?.write("STOP\n");
     cleanupTimer = setTimeout(() => {
-      result.error ??= { code: "EOWNERCLEANUP", message: "Windows Job cleanup receipt missing" };
+      result.cleanupError = { code: "EOWNERCLEANUP", message: "Windows Job cleanup receipt missing" };
+      recordFailure(result.cleanupError);
       socket?.destroy();
       helper?.kill();
       helper?.stdout?.destroy();
       helper?.stderr?.destroy();
       if (!helper || helperClosed) { finish(); return; }
       forcedCloseTimer = setTimeout(() => {
-        result.error = { code: "EOWNERCLEANUP", message: "Windows helper did not close after forced termination" };
+        result.cleanupError = { code: "EOWNERCLEANUP", message: "Windows helper did not close after forced termination" };
+        recordFailure(result.cleanupError);
         finish();
       }, cleanupMs);
     }, cleanupMs);
@@ -380,9 +423,14 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
   const maybeFinish = () => {
     if (!helperClosed || (socket && !controlEnded)) return;
     // The independent control socket must drain before a generic exit fallback.
-    result.error ??= helperExitError;
+    if (helperExitError) recordFailure(helperExitError);
+    if (closedJob) {
+      delete result.cleanupError;
+    } else {
+      result.cleanupError = { code: "EOWNERCLEANUP", message: "Windows Job extinction receipt was not observed" };
+    }
     if (!closedJob || result.status === null) {
-      result.error ??= { code: "EOWNERNATIVE", message: "Windows adapter exited without Job extinction receipt" };
+      recordFailure({ code: "EOWNERNATIVE", message: "Windows adapter exited without Job extinction receipt" });
     }
     finish();
   };
@@ -413,7 +461,7 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
         } else if (line === "CLOSED" && admitted) {
           closedJob = true;
         } else if (line === "TIMEOUT" && admitted) {
-          result.error ??= { code: "ETIMEDOUT", message: `command timed out after ${options.timeout}ms` };
+          recordFailure({ code: "ETIMEDOUT", message: `command timed out after ${options.timeout}ms` });
         } else if (line.startsWith("ERROR ")) {
           try {
             const detail = JSON.parse(Buffer.from(line.slice(6), "base64").toString("utf8"));

@@ -128,7 +128,7 @@ you intentionally pin or update fixture revisions.
 ### Inspector command limits
 
 Inspector smoke and generated-surface commands default to 10 minutes. Inspector
-checkout Git and npm commands default to 2 minutes. Set
+checkout Git and npm commands and fixture-security npm audits default to 2 minutes. Set
 `CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS`, `CRABPOT_GIT_TIMEOUT_MS`, or
 `CRABPOT_NPM_TIMEOUT_MS` to a decimal integer from 1 through 2147483647;
 zero, fractions, trailing text, and infinite timeouts are rejected.
@@ -137,10 +137,20 @@ Commands remain synchronous to callers, with a separate bounded supervisor for
 startup, execution, output, and descendant cleanup. Captured checkout and
 generated-surface output retains the 1 MiB combined stdout/stderr limit. Smoke
 output streams through inherited native descriptors without a total-output cap.
+Fixture-security audits retain a 16 MiB combined capture limit.
+
+The first command error is preserved when cleanup also fails. Unconfirmed
+cleanup adds `cleanupError` to the result and `; command cleanup was not confirmed`
+to the error message; it is never reported as success. On POSIX, an unexpected
+supervisor Worker loss can leave descendants alive. The caller does not signal
+a cached process-group number after losing its owner. Permission errors are
+not proof of process-group extinction.
+
 Windows requires 64-bit Windows 10/Server 2016 or newer and Windows PowerShell:
 commands enter their private Job at creation, and setup failures never fall back
 to uncontained execution. A separate helper Job contains bootstrap compiler
 children too. Native Git runs directly; only batch commands use `cmd.exe`.
+Windows Jobs retain owner-loss cleanup independently of the Worker.
 This process ownership is not a sandbox for hostile plugin code.
 
 ## Compatibility report

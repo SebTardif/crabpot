@@ -125,8 +125,11 @@ test("owned command bounds a missing Worker bootstrap without starting the reque
   await assert.rejects(readFile(marker), { code: "ENOENT" });
 });
 
-for (const fault of ["signal", "probe", "worker-loss"]) {
-  test(`POSIX owner preserves overflow through ${fault} failure without cached-PGID signaling`, {
+for (const [fault, operation] of [
+  ["signal", "overflow"], ["probe", "overflow"], ["worker-loss", "overflow"],
+  ["probe", "timeout"], ["none", "timeout"],
+]) {
+  test(`POSIX owner preserves ${operation} with ${fault} fault without cached-PGID signaling`, {
     skip: process.platform === "win32", timeout: 20_000,
   }, async (t) => {
     const root = await mkdtemp(path.join(os.tmpdir(), "crabpot owner fault "));
@@ -167,7 +170,7 @@ for (const fault of ["signal", "probe", "worker-loss"]) {
           record("probe-EPERM");
           throw Object.assign(new Error("injected persistent probe denial"), { code: "EPERM" });
         }
-        if (!isMainThread && signal === "SIGTERM" && !injected && fault !== "probe") {
+        if (!isMainThread && signal === "SIGTERM" && !injected && ["signal", "worker-loss"].includes(fault)) {
           injected = true;
           record(fault);
           if (fault === "worker-loss") process.exit(71);
@@ -180,7 +183,7 @@ for (const fault of ["signal", "probe", "worker-loss"]) {
     const execution = spawnSync(process.execPath, ["--input-type=module", "-e", `
       import { runOwnedCommand } from ${JSON.stringify(pathToFileURL(ownerPath).href)};
       const started = performance.now();
-      const result = runOwnedCommand(process.execPath, ${JSON.stringify([fixture, "overflow", root])}, {
+      const result = runOwnedCommand(process.execPath, ${JSON.stringify([fixture, operation, root])}, {
         timeout: 1000, maxBuffer: 64, encoding: "utf8",
       });
       console.log(JSON.stringify({
@@ -191,20 +194,26 @@ for (const fault of ["signal", "probe", "worker-loss"]) {
     `], { encoding: "utf8", timeout: 12_000 });
     const calls = (await readFile(callsPath, "utf8")).trim().split("\n").filter(Boolean).map(JSON.parse);
     const injected = calls.filter(({ event }) => event === (fault === "probe" ? "probe-EPERM" : fault));
-    assert.ok(injected.length > 0, "the owned group's fault must actually be injected");
+    if (fault === "none") assert.equal(injected.length, 0);
+    else assert.ok(injected.length > 0, "the owned group's fault must actually be injected");
     t.diagnostic(`${fault}: injected ${injected.length}; parent group signals ${calls.filter(({ event }) => event === "parent-signal").length}`);
     assert.ifError(execution.error);
     assert.equal(execution.status, 0, execution.stderr);
     const observed = JSON.parse(execution.stdout);
     assert.deepEqual(calls.filter(({ event }) => event === "parent-signal"), []);
-    assert.equal(observed.error?.code, "ENOBUFS", JSON.stringify(observed));
+    assert.equal(observed.error?.code, operation === "overflow" ? "ENOBUFS" : "ETIMEDOUT", JSON.stringify(observed));
+    assert.ok(observed.error.message.startsWith(operation === "overflow"
+      ? "command output exceeded maxBuffer" : "command timed out after 1000ms"), JSON.stringify(observed));
     assert.ok(observed.elapsed < (fault === "worker-loss" ? 6500 : 4000), JSON.stringify(observed));
-    if (fault === "signal") {
+    if (fault === "signal" || fault === "none") {
       assert.equal(observed.cleanupError, undefined, "subsequent extinction must be observed");
+      assert.doesNotMatch(observed.error.message, /command cleanup was not confirmed/);
+      if (operation === "timeout") assert.equal(observed.error.message, "command timed out after 1000ms");
       const command = await readReceipt(path.join(root, "command.json"), 1000, () => execution.stderr);
       assert.equal(await waitForExit(command.pid, 250), true);
     } else {
       assert.equal(observed.cleanupError?.code, "EOWNERCLEANUP", JSON.stringify(observed));
+      assert.match(observed.error.message, /; command cleanup was not confirmed$/);
       if (fault === "probe") {
         assert.ok(injected.length > 1, "probe denial must persist until the cleanup deadline");
         assert.ok(injected.at(-1).at - injected[0].at >= 1900, "probe denial must span the cleanup interval");

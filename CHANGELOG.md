@@ -2,7 +2,7 @@
 
 ## 0.2.2 - Unreleased
 
-- Bound fixture-security npm audits with native Windows command execution, strict timeout settings, and combined 16 MiB output capture; preserve valid vulnerability exit status 1 and existing severity/fixability policy. Thanks @SebTardif.
+- Bound fixture-security npm audits with native Windows command execution, strict timeout settings, and combined 16 MiB output capture; preserve valid vulnerability exit status 1 and existing severity/fixability policy. Preserve primary command errors through cleanup failures, report unconfirmed cleanup, and stop cached process-group signaling after POSIX supervisor loss. Thanks @SebTardif.
 - Bound inspector and checkout commands through descendant cleanup, including Windows Job ownership, strict timeout settings, and combined captured-output limits; preserve uncapped inherited smoke output. Thanks @SebTardif for the initial timeout repair.
 - Reject fixture checkout and payload escapes, including linked destination components and archive metadata links, before materialization can write outside the selected fixture; preserve valid nested paths and dotted names. Thanks @bunlongheng.
 - Failed npm fixture packs now stop materialization and dependent checks after collecting availability evidence, including when report writing is disabled; successful pinned fallbacks remain supported. Availability reports now label the resolved CLI or environment fixture selection.

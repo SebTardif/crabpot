@@ -96,6 +96,7 @@ for (const track of ["latest", "development"]) {
   test(`${track} native Git timeout fails even with --warn-missing-tag`, async (t) => {
     const fixture = await createFixture(t, { gitFailure: "stall" });
     const result = await invoke(fixture, track, { CRABPOT_GIT_TIMEOUT_MS: "350" }, { cli: true, warn: true });
+    t.diagnostic(JSON.stringify({ status: result.status, output: result.output, requests: fixture.requests }));
     assertNativeGitRequest(fixture);
     assert.equal(fixture.requests.find(({ pathname }) => pathname === "/git/info/refs").rescued, false,
       "the product must return before the fixture rescues the stalled Git transport");

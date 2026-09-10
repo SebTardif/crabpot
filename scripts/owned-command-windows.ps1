@@ -14,6 +14,9 @@ try {
     $line = $reader.ReadLine()
     if ($null -eq $line) { exit 1 }
     $request = $line | ConvertFrom-Json
+    if ($request.startupDiagnostic) {
+        try { $writer.WriteLine("DIAG request-received " + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) } catch {}
+    }
     # Direct .NET delegates do not depend on the PowerShell runspace while Add-Type blocks.
     $ownerLost = [System.Threading.CancellationTokenSource]::new()
     $killSelf = [System.Delegate]::CreateDelegate([System.Action], [System.Diagnostics.Process]::GetCurrentProcess(), "Kill")
@@ -21,6 +24,9 @@ try {
     $bootstrapKill = $ownerLost.Token.Register($killSelf)
     $ownerRead = $reader.ReadLineAsync()
     $ownerRead.ConfigureAwait($false).GetAwaiter().OnCompleted($cancelOwner)
+    if ($request.startupDiagnostic) {
+        try { $writer.WriteLine("DIAG owner-monitor-installed " + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) } catch {}
+    }
     # CodeDOM starts csc.exe. Contain this dedicated helper before compiling the
     # command owner; emitting these five fixed declarations starts no compiler.
     if ([IntPtr]::Size -ne 8) { throw "Windows Job ownership requires a 64-bit Windows runtime" }
@@ -73,13 +79,22 @@ try {
                 [System.Runtime.InteropServices.Marshal]::GetLastWin32Error(), "AssignProcessToJobObject(bootstrap)")
         }
         $assigned = $true
+        if ($request.startupDiagnostic) {
+            try { $writer.WriteLine("DIAG bootstrap-job-assigned " + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) } catch {}
+        }
     } finally {
         if ($limits -ne [IntPtr]::Zero) { [System.Runtime.InteropServices.Marshal]::FreeHGlobal($limits) }
         if (-not $assigned) { [void]$native::CloseHandle($bootstrapJob) }
     }
     # Keep the non-inheritable Job handle for this process's lifetime. Helper
     # death closes it and kills compiler descendants; that is not a success receipt.
+    if ($request.startupDiagnostic) {
+        try { $writer.WriteLine("DIAG compile-begin " + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) } catch {}
+    }
     Add-Type -Path (Join-Path $PSScriptRoot "owned-command-windows.cs")
+    if ($request.startupDiagnostic) {
+        try { $writer.WriteLine("DIAG compile-end " + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) } catch {}
+    }
     [CrabpotCommandJob]::Run(
         $request.application, $request.commandLine, $request.cwd, $request.environment,
         [int]$request.timeout, [int]$request.cleanup, $ownerLost, $bootstrapKill, $writer)

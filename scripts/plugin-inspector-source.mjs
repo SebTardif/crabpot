@@ -21,7 +21,15 @@ export async function loadPluginInspector() {
 }
 
 export async function loadPluginInspectorPublicApi() {
-  return import(pathToFileURL(resolvePluginInspectorPublicApiPath()).href);
+  try {
+    return import(pathToFileURL(resolvePluginInspectorPublicApiPath()).href);
+  } catch (error) {
+    // Temporary failure-only observation of queued Worker/termination events.
+    if (process.platform === "win32" && error?.code === "EOWNERSTART") {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    throw error;
+  }
 }
 
 export function resolvePluginInspectorCliInvocation(options = {}) {

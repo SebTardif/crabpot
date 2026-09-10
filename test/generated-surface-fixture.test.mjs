@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { chmodSync, writeFileSync } from "node:fs";
 import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -76,15 +77,24 @@ test("generated surface fixture verifies target OpenClaw surface", async () => {
     assert.doesNotMatch(sdkSource, /import type/);
     assert.equal(report.summary.missingStaticCount, 0);
     assert.equal(report.summary.missingRuntimeCount, 0);
+    const previousBin = process.env.CRABPOT_PLUGIN_INSPECTOR_BIN;
+    const previousTimeout = process.env.CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS;
+    process.env.CRABPOT_PLUGIN_INSPECTOR_BIN = writeHangCommand(tempDir);
+    process.env.CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS = "250";
+    try {
+      const failed = await buildGeneratedSurfaceReport({ openclawPath: openclawRoot, pluginRoot });
+      assert.equal(failed.status, "fail");
+      assert.ok(failed.errors.includes("plugin-inspector static timed out after 250ms"));
+      assert.ok(failed.errors.includes("plugin-inspector runtime timed out after 250ms"));
+    } finally {
+      if (previousBin === undefined) delete process.env.CRABPOT_PLUGIN_INSPECTOR_BIN;
+      else process.env.CRABPOT_PLUGIN_INSPECTOR_BIN = previousBin;
+      if (previousTimeout === undefined) delete process.env.CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS;
+      else process.env.CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS = previousTimeout;
+    }
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
-});
-
-test("generated surface fixture honors platform-specific CLI shell invocation", async () => {
-  const source = await readFile("scripts/check-generated-surface-fixture.mjs", "utf8");
-
-  assert.match(source, /shell: invocation\.shell === true/);
 });
 
 test("generated surface fixture refuses plugin roots outside .crabpot", () => {
@@ -100,3 +110,16 @@ test("generated surface fixture refuses plugin roots outside .crabpot", () => {
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /--plugin-root must be inside \.crabpot/);
 });
+
+function writeHangCommand(dir) {
+  if (process.platform === "win32") {
+    const file = path.join(dir, "hang-inspector.cmd");
+    writeFileSync(file, `@echo off\r\n"${process.execPath}" -e "setTimeout(() => {}, 30000)"\r\n`);
+    return file;
+  }
+
+  const file = path.join(dir, "hang-inspector");
+  writeFileSync(file, `#!/bin/sh\nexec "${process.execPath}" -e 'setTimeout(() => {}, 30000)'\n`);
+  chmodSync(file, 0o755);
+  return file;
+}

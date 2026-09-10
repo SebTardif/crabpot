@@ -1,11 +1,15 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { readConfiguredManifest, repoRoot } from "./manifest-lib.mjs";
-import { loadPluginInspectorPublicApi, resolvePluginInspectorCliInvocation } from "./plugin-inspector-source.mjs";
+import {
+  defaultPluginInspectorTimeoutMs,
+  loadPluginInspectorPublicApi,
+  resolvePluginInspectorCliInvocation,
+} from "./plugin-inspector-source.mjs";
+import { configuredTimeoutMs, runOwnedCommand } from "./owned-command.mjs";
 
 const defaultPluginRoot = path.join(repoRoot, ".crabpot/generated-surface-plugin");
 const defaultReportJsonPath = path.join(repoRoot, "reports/crabpot-generated-surface.json");
@@ -140,10 +144,10 @@ export async function buildGeneratedSurfaceReport(options = {}) {
 
   const staticResult = runPluginInspector(pluginRoot, { runtime: false });
   const runtimeResult = runPluginInspector(pluginRoot, { runtime: true });
-  const staticReport = staticResult.status === 0
+  const staticReport = staticResult.status === 0 && staticResult.failures.length === 0
     ? await readJson(path.join(pluginRoot, "reports/plugin-inspector-report.json"))
     : { fixtures: [] };
-  const runtimeReport = runtimeResult.status === 0
+  const runtimeReport = runtimeResult.status === 0 && runtimeResult.failures.length === 0
     ? await readJson(path.join(pluginRoot, "reports/plugin-inspector-runtime-capture.json"))
     : { results: [] };
   const observed = observedSurface({ staticReport, runtimeReport });
@@ -460,6 +464,7 @@ export { ${sdkExports.map((_, index) => `sdk${index}`).join(", ")} };
 
 function runPluginInspector(pluginRoot, { runtime }) {
   const invocation = resolvePluginInspectorCliInvocation();
+  const timeout = configuredTimeoutMs("CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS", defaultPluginInspectorTimeoutMs);
   const commandArgs = [
     ...invocation.args,
     "check",
@@ -470,22 +475,32 @@ function runPluginInspector(pluginRoot, { runtime }) {
     "reports",
     ...(runtime ? ["--runtime", "--mock-sdk"] : ["--no-runtime"]),
   ];
-  const result = spawnSync(invocation.command, commandArgs, {
+  const result = runOwnedCommand(invocation.command, commandArgs, {
     cwd: pluginRoot,
     encoding: "utf8",
     env: {
       ...process.env,
       ...(runtime ? { PLUGIN_INSPECTOR_EXECUTE_ISOLATED: "1" } : {}),
     },
-    shell: invocation.shell === true,
+    timeout,
   });
+
+  if (result.error?.code === "ETIMEDOUT") {
+    return {
+      command: displayCommand(invocation.command, commandArgs),
+      status: result.status,
+      stdout: normalizeOutputPaths(result.stdout),
+      stderr: normalizeOutputPaths(result.stderr),
+      failures: [`plugin-inspector ${runtime ? "runtime" : "static"} timed out after ${timeout}ms`],
+    };
+  }
 
   return {
     command: displayCommand(invocation.command, commandArgs),
     status: result.status,
     stdout: normalizeOutputPaths(result.stdout),
     stderr: normalizeOutputPaths(result.stderr),
-    failures: result.status === 0
+    failures: !result.error && result.status === 0
       ? []
       : [
           `plugin-inspector ${runtime ? "runtime" : "static"} failed with ${result.status}: ${normalizeOutputPaths(

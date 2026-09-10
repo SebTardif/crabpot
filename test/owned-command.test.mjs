@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { copyFile, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -23,7 +23,9 @@ test("owned command preserves synchronous results, cwd, environment, and argumen
   assert.ifError(result.error);
   assert.equal(result.status, 7);
   assert.equal(result.signal, null);
-  assert.deepEqual(JSON.parse(result.stdout), { cwd: await realpath(root), env: "retained value", args });
+  const observed = JSON.parse(result.stdout);
+  observed.cwd = await realpath(observed.cwd);
+  assert.deepEqual(observed, { cwd: await realpath(root), env: "retained value", args });
   assert.equal(result.stderr, "retained stderr");
 });
 
@@ -143,15 +145,19 @@ test("Windows command preserves the native process creation error", {
   const root = await temporaryRoot(t);
   const command = path.join(root, "invalid executable.exe");
   await writeFile(command, "not a Windows executable\n");
+  const baseline = spawnSync(command, ["argument"], { timeout: 1000 });
+  assert.equal(baseline.status, null);
+  assert.ok(baseline.error);
   const result = runOwnedCommand(command, ["argument"], { timeout: 1000 });
   assert.equal(result.status, null);
+  assert.ok([193, 216].includes(result.error?.nativeCode), result.error?.message);
   assert.deepEqual({
     code: result.error?.code,
-    nativeCode: result.error?.nativeCode,
     operation: result.error?.operation,
-  }, { code: "ENOEXEC", nativeCode: 193, operation: "CreateProcessW(JOB_LIST)" }, result.error?.message);
+  }, { code: baseline.error.code, operation: "CreateProcessW(JOB_LIST)" }, result.error?.message);
   assert.equal(result.error?.path, command);
   assert.deepEqual(result.error?.spawnargs, ["argument"]);
+  t.diagnostic(`native error ${result.error.nativeCode} retains Node ${baseline.error.code}`);
 });
 
 for (const ownerLost of [false, true]) {

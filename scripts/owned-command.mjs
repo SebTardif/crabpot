@@ -420,7 +420,7 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
             if (typeof detail.message !== "string") throw new Error("missing native error message");
             const spawnFailure = detail.operation === "CreateProcessW(JOB_LIST)";
             const code = spawnFailure
-              ? ({ 2: "ENOENT", 3: "ENOENT", 5: "EACCES", 193: "ENOEXEC" }[detail.nativeCode] ?? "EOWNERNATIVE")
+              ? ({ 2: "ENOENT", 3: "ENOENT", 5: "EACCES", 193: "EFTYPE", 216: "UNKNOWN" }[detail.nativeCode] ?? "EOWNERNATIVE")
               : "EOWNERNATIVE";
             fail(Object.assign(new Error(detail.message), {
               code, nativeCode: detail.nativeCode, operation: detail.operation,

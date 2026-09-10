@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { readFileSync, readdirSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "./manifest-lib.mjs";
+import { configuredTimeoutMs, runOwnedCommand } from "./owned-command.mjs";
 
 const blockedSeverities = new Set(["critical", "high"]);
 const defaultNpmTimeoutMs = 2 * 60 * 1000;
@@ -32,7 +32,7 @@ function main() {
   const timeout = configuredTimeoutMs("CRABPOT_NPM_TIMEOUT_MS", defaultNpmTimeoutMs);
   for (const fixture of fixtureLockDirectories()) {
     const lockfile = JSON.parse(readFileSync(path.join(fixture.path, "package-lock.json"), "utf8"));
-    const result = spawnSync("npm", ["audit", "--package-lock-only", "--omit=dev", "--json"], {
+    const result = runOwnedCommand("npm", ["audit", "--package-lock-only", "--omit=dev", "--json"], {
       cwd: fixture.path,
       encoding: "utf8",
       maxBuffer: 16 * 1024 * 1024,
@@ -105,18 +105,6 @@ export function parseAuditResult(result, fixture, timeout) {
     throw new Error(`${fixture}: npm audit exited with unexpected status ${result.status}`);
   }
   return audit;
-}
-
-function configuredTimeoutMs(envName, fallback) {
-  const raw = process.env[envName];
-  if (!raw) {
-    return fallback;
-  }
-  const parsed = Number.parseInt(raw, 10);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    throw new Error(`${envName} must be a positive integer timeout in milliseconds`);
-  }
-  return parsed;
 }
 
 function hasImmutableOwner(node, packages) {

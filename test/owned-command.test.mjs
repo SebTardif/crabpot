@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
 import { copyFile, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
+import { createConnection } from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -124,6 +125,160 @@ test("owned command bounds a missing Worker bootstrap without starting the reque
   await assert.rejects(readFile(marker), { code: "ENOENT" });
 });
 
+for (const [fault, operation] of [
+  ["signal", "overflow"], ["probe", "overflow"], ["worker-loss", "overflow"],
+  ["probe", "timeout"], ["none", "timeout"],
+]) {
+  test(`POSIX owner preserves ${operation} with ${fault} fault without cached-PGID signaling`, {
+    skip: process.platform === "win32", timeout: 20_000,
+  }, async (t) => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "crabpot owner fault "));
+    const rescuePath = path.join(root, "rescue.sock");
+    t.after(async () => {
+      await new Promise((resolve, reject) => {
+        const socket = createConnection(rescuePath, () => socket.end());
+        socket.setTimeout(15_000, () => socket.destroy(new Error("owned fixture rescue did not close")));
+        socket.once("error", (error) => {
+          if (error.code !== "ENOENT" && error.code !== "ECONNREFUSED") reject(error);
+        });
+        socket.once("close", resolve);
+      });
+      await rm(root, { recursive: true, force: true });
+    });
+    const ownerPath = await copyOwner(root);
+    const callsPath = path.join(root, "fault-calls");
+    await writeFile(callsPath, "");
+    const source = await readFile(ownerPath, "utf8");
+    await writeFile(ownerPath, `import "./fault-control.mjs";\n${source}`);
+    await writeFile(path.join(root, "scripts/fault-control.mjs"), `
+      import { appendFileSync, readFileSync } from "node:fs";
+      import { isMainThread } from "node:worker_threads";
+      const kill = process.kill;
+      const fault = ${JSON.stringify(fault)};
+      let injected = false;
+      process.kill = (pid, signal) => {
+        if (pid >= 0) return kill(pid, signal);
+        const record = (event) => appendFileSync(${JSON.stringify(callsPath)},
+          JSON.stringify({ event, pid, signal, at: performance.now() }) + "\\n");
+        if (isMainThread && signal !== 0) {
+          record("parent-signal");
+          throw Object.assign(new Error("parent has no retained group authority"), { code: "EPERM" });
+        }
+        const command = JSON.parse(readFileSync(${JSON.stringify(path.join(root, "command.json"))}, "utf8"));
+        if (pid !== -command.pid) throw new Error("fault targeted a different process group");
+        if (!isMainThread && fault === "probe" && signal === 0) {
+          record("probe-EPERM");
+          throw Object.assign(new Error("injected persistent probe denial"), { code: "EPERM" });
+        }
+        if (!isMainThread && signal === "SIGTERM" && !injected && ["signal", "worker-loss"].includes(fault)) {
+          injected = true;
+          record(fault);
+          if (fault === "worker-loss") process.exit(71);
+          throw Object.assign(new Error("injected signal denial"), { code: "EPERM" });
+        }
+        return kill(pid, signal);
+      };
+    `);
+    const fixture = fileURLToPath(new URL("./fixtures/owned-command-posix.mjs", import.meta.url));
+    const execution = spawnSync(process.execPath, ["--input-type=module", "-e", `
+      import { runOwnedCommand } from ${JSON.stringify(pathToFileURL(ownerPath).href)};
+      const started = performance.now();
+      const result = runOwnedCommand(process.execPath, ${JSON.stringify([fixture, operation, root])}, {
+        timeout: 1000, maxBuffer: 64, encoding: "utf8",
+      });
+      console.log(JSON.stringify({
+        error: result.error && { code: result.error.code, message: result.error.message },
+        cleanupError: result.cleanupError,
+        elapsed: performance.now() - started,
+      }));
+    `], { encoding: "utf8", timeout: 12_000 });
+    const calls = (await readFile(callsPath, "utf8")).trim().split("\n").filter(Boolean).map(JSON.parse);
+    const injected = calls.filter(({ event }) => event === (fault === "probe" ? "probe-EPERM" : fault));
+    if (fault === "none") assert.equal(injected.length, 0);
+    else assert.ok(injected.length > 0, "the owned group's fault must actually be injected");
+    t.diagnostic(`${fault}: injected ${injected.length}; parent group signals ${calls.filter(({ event }) => event === "parent-signal").length}`);
+    assert.ifError(execution.error);
+    assert.equal(execution.status, 0, execution.stderr);
+    const observed = JSON.parse(execution.stdout);
+    assert.deepEqual(calls.filter(({ event }) => event === "parent-signal"), []);
+    assert.equal(observed.error?.code, operation === "overflow" ? "ENOBUFS" : "ETIMEDOUT", JSON.stringify(observed));
+    assert.ok(observed.error.message.startsWith(operation === "overflow"
+      ? "command output exceeded maxBuffer" : "command timed out after 1000ms"), JSON.stringify(observed));
+    assert.ok(observed.elapsed < (fault === "worker-loss" ? 6500 : 4000), JSON.stringify(observed));
+    if (fault === "signal" || fault === "none") {
+      assert.equal(observed.cleanupError, undefined, "subsequent extinction must be observed");
+      assert.doesNotMatch(observed.error.message, /command cleanup was not confirmed/);
+      if (operation === "timeout") assert.equal(observed.error.message, "command timed out after 1000ms");
+      const command = await readReceipt(path.join(root, "command.json"), 1000, () => execution.stderr);
+      assert.equal(await waitForExit(command.pid, 250), true);
+    } else {
+      assert.equal(observed.cleanupError?.code, "EOWNERCLEANUP", JSON.stringify(observed));
+      assert.match(observed.error.message, /; command cleanup was not confirmed$/);
+      if (fault === "probe") {
+        assert.ok(injected.length > 1, "probe denial must persist until the cleanup deadline");
+        assert.ok(injected.at(-1).at - injected[0].at >= 1900, "probe denial must span the cleanup interval");
+        assert.equal(observed.cleanupError.cause?.code, "EPERM");
+      } else {
+        assert.match(observed.cleanupError.message, /not observed|unknown|receipt/i);
+        const command = await readReceipt(path.join(root, "command.json"), 1000, () => execution.stderr);
+        assert.equal(process.kill(command.pid, 0), true, "Worker loss must not claim command extinction");
+      }
+    }
+  });
+}
+
+test("Darwin zombie-only group reports EPERM until its parked parent reaps it", {
+  skip: process.platform !== "darwin", timeout: 25_000,
+}, async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "crabpot zombie group "));
+  const fixture = fileURLToPath(new URL("./fixtures/owned-command-posix.mjs", import.meta.url));
+  const parent = spawn(process.execPath, [fixture, "zombie-parent", root], { stdio: ["ignore", "ignore", "pipe"] });
+  let stderr = "";
+  parent.stderr.on("data", (chunk) => { stderr += chunk; });
+  const closed = new Promise((resolve) => parent.once("close", resolve));
+  const sentinel = spawn(process.execPath, ["-e", `
+    process.stdin.resume();
+    setTimeout(() => process.exit(98), 20000).unref();
+  `], { stdio: ["pipe", "ignore", "ignore"] });
+  const sentinelClosed = new Promise((resolve) => sentinel.once("close", resolve));
+  t.after(async () => {
+    await writeFile(path.join(root, "child-release"), "rescue");
+    await writeFile(path.join(root, "parent-rescue"), "rescue");
+    await closed;
+    sentinel.stdin.end();
+    await sentinelClosed;
+    await rm(root, { recursive: true, force: true });
+  });
+  const parked = await readReceipt(path.join(root, "parked.json"), 5000, () => stderr);
+  assert.equal(parked.pid, parent.pid);
+  assert.ok(parked.childPid > 0);
+  await writeFile(path.join(root, "child-release"), "normal");
+  const exiting = await readReceipt(path.join(root, "child-exiting.json"), 3000, () => stderr);
+  assert.equal(exiting.pid, parked.childPid);
+  assert.equal(exiting.reason, "normal");
+  let groupError;
+  const deadline = performance.now() + 3000;
+  while (!groupError && performance.now() < deadline) {
+    try { process.kill(-parked.childPid, 0); } catch (error) { groupError = error; }
+    if (!groupError) await delay(10);
+  }
+  assert.equal(groupError?.code, "EPERM", "a zombie-only group is not ESRCH absence proof");
+  await writeFile(path.join(root, "parent-release"), "normal");
+  const unparked = await readReceipt(path.join(root, "unparked.json"), 3000, () => stderr);
+  assert.equal(unparked.reason, "normal");
+  const reaped = await readReceipt(path.join(root, "reaped.json"), 3000, () => stderr);
+  const childClosed = await readReceipt(path.join(root, "child-closed.json"), 3000, () => stderr);
+  assert.deepEqual(reaped, { pid: parked.childPid, code: 0, signal: null });
+  assert.deepEqual(childClosed, reaped);
+  await closed;
+  assert.equal(parent.exitCode, 0, stderr);
+  assert.throws(() => process.kill(-parked.childPid, 0), { code: "ESRCH" });
+  assert.equal(sentinel.exitCode, null);
+  assert.equal(sentinel.signalCode, null);
+  assert.equal(process.kill(sentinel.pid, 0), true);
+  t.diagnostic("native EPERM -> explicit reap/closure -> ESRCH; no historic first-failure sequence inferred");
+});
+
 test("Windows adapter setup failure never runs an uncontained command", {
   skip: process.platform !== "win32", timeout: 20_000,
 }, async (t) => {
@@ -225,6 +380,117 @@ for (const ownerLost of [false, true]) {
     }
     assert.deepEqual(errors, []);
     await assert.rejects(readFile(commandMarker), { code: "ENOENT" });
+  });
+}
+
+for (const phase of ["preconnection", "late connection"]) {
+  test(`Windows cancelled bootstrap cleans ${phase} without issuing a command`, {
+    skip: process.platform !== "win32", timeout: 30_000,
+  }, async (t) => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "crabpot connection owner "));
+    const ownerPath = await copyOwner(root);
+    const helperReady = path.join(root, "helper-ready.json");
+    const releaseFile = path.join(root, "helper-release");
+    const rescueFile = path.join(root, "helper-rescue");
+    const escapeFile = path.join(root, "helper-escape.json");
+    const resultFile = path.join(root, "result.json");
+    const commandMarker = path.join(root, "command-started");
+    const requestMarker = path.join(root, "request-issued");
+    const stopMarker = path.join(root, "stopped-before-connection");
+    const original = await readFile(new URL("../scripts/owned-command-windows.ps1", import.meta.url), "utf8");
+    const connection = "    $pipe.Connect(5000)";
+    assert.equal(original.split(connection).length, 2);
+    const ps = (value) => `'${value.replaceAll("'", "''")}'`;
+    const blocked = original.replace(connection, `
+        $fixtureExpiry = [System.Threading.CancellationTokenSource]::new()
+        $fixtureKill = [System.Delegate]::CreateDelegate(
+            [System.Action], [System.Diagnostics.Process]::GetCurrentProcess(), "Kill")
+        $fixtureRegistration = $fixtureExpiry.Token.Register($fixtureKill)
+        $expiresAt = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() + 20000
+        $fixtureExpiry.CancelAfter(20000)
+        $live = @{ pid = $PID; phase = "preconnection"; expiresAtMs = $expiresAt } | ConvertTo-Json -Compress
+        [System.IO.File]::WriteAllText(${ps(helperReady + ".pending")}, $live)
+        [System.IO.File]::Move(${ps(helperReady + ".pending")}, ${ps(helperReady)})
+        while (-not [System.IO.File]::Exists(${ps(releaseFile)})) {
+            if ([System.IO.File]::Exists(${ps(rescueFile)})) {
+                $escape = @{ rescued = $true } | ConvertTo-Json -Compress
+                [System.IO.File]::WriteAllText(${ps(escapeFile + ".pending")}, $escape)
+                [System.IO.File]::Move(${ps(escapeFile + ".pending")}, ${ps(escapeFile)})
+                exit 99
+            }
+            Start-Sleep -Milliseconds 20
+        }
+        ${connection}
+    `);
+    await writeFile(path.join(root, "scripts/owned-command-windows.ps1"), blocked);
+    await copyFile(new URL("../scripts/owned-command-windows.cs", import.meta.url),
+      path.join(root, "scripts/owned-command-windows.cs"));
+    if (phase === "late connection") {
+      const owner = await readFile(ownerPath, "utf8");
+      const accept = '  server.once("connection", (connection) => {';
+      assert.equal(owner.split(accept).length, 2);
+      // Cancel at delivery of the real connection. Observe the actual write,
+      // so killing the helper cannot hide an incorrectly issued request.
+      await writeFile(ownerPath, `import { writeFileSync } from "node:fs";\n` + owner.replace(accept, `${accept}
+        const send = connection.write.bind(connection);
+        connection.write = (...args) => {
+          if (typeof args[0] === "string" && args[0].startsWith("{")) {
+            writeFileSync(${JSON.stringify(requestMarker)}, "issued");
+          }
+          return send(...args);
+        };
+        stop();
+        writeFileSync(${JSON.stringify(stopMarker)}, "stopped");
+      `));
+    }
+    const errors = [];
+    const worker = new Worker(`
+      const { workerData } = require("node:worker_threads");
+      setInterval(() => {}, 1000);
+      import(workerData.owner).then(({ runOwnedCommand }) => {
+        const result = runOwnedCommand(process.execPath, ["-e", workerData.command], { timeout: 1000 });
+        const fs = require("node:fs");
+        fs.writeFileSync(workerData.result + ".pending", JSON.stringify(result));
+        fs.renameSync(workerData.result + ".pending", workerData.result);
+      });
+    `, { eval: true, workerData: {
+      owner: pathToFileURL(ownerPath).href, result: resultFile,
+      command: `require("node:fs").writeFileSync(${JSON.stringify(commandMarker)}, "started")`,
+    } });
+    worker.on("error", (error) => errors.push(error));
+    let helperPid;
+    t.after(async () => {
+      let closed = false;
+      try {
+        await writeFile(rescueFile, "stop");
+        if (helperPid) closed = await waitForExit(helperPid, 22_000);
+      } finally {
+        await worker.terminate();
+        if (closed) await rm(root, { recursive: true, force: true });
+      }
+      assert.equal(closed, true, "controlled helper must close before fixture removal");
+    });
+    const ready = await readReceipt(helperReady, 14_000, () => errors.map(String).join("\n"));
+    assert.equal(ready.phase, "preconnection");
+    assert.ok(Number.isSafeInteger(ready.pid) && ready.pid > 0);
+    helperPid = ready.pid;
+    assert.equal(process.kill(helperPid, 0), true, "actual helper must be alive before cancellation");
+    if (phase === "late connection") await writeFile(releaseFile, "connect");
+    const result = await readReceipt(resultFile, 14_000, () => errors.map(String).join("\n"));
+    assert.ok(result.error);
+    if (phase === "preconnection") assert.equal(result.error.code, "EOWNERSTART");
+    const closed = await waitForExit(helperPid, 100);
+    t.diagnostic(`phase=${phase}; error=${result.error.code}; helperClosedBeforeRescue=${closed}`);
+    assert.ok(Date.now() < ready.expiresAtMs, "cleanup assertion must precede independent fixture expiry");
+    if (phase === "late connection") {
+      assert.equal(await readFile(stopMarker, "utf8"), "stopped");
+      await assert.rejects(readFile(requestMarker), { code: "ENOENT" });
+    }
+    assert.equal(closed, true, "cancelled helper must exit before cooperative rescue");
+    assert.equal(result.cleanupError, undefined, "closed helper with no issued request has known cleanup");
+    await assert.rejects(readFile(escapeFile), { code: "ENOENT" });
+    await assert.rejects(readFile(commandMarker), { code: "ENOENT" });
+    assert.deepEqual(errors, []);
   });
 }
 

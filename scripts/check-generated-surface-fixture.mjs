@@ -485,7 +485,7 @@ function runPluginInspector(pluginRoot, { runtime }) {
     timeout,
   });
 
-  if (result.error?.code === "ETIMEDOUT") {
+  if (result.error?.code === "ETIMEDOUT" && !result.cleanupError) {
     return {
       command: displayCommand(invocation.command, commandArgs),
       status: result.status,

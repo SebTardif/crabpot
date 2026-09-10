@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { readFileSync, readdirSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "./manifest-lib.mjs";
+import { configuredTimeoutMs, runOwnedCommand } from "./owned-command.mjs";
 
 const blockedSeverities = new Set(["critical", "high"]);
+const defaultNpmTimeoutMs = 2 * 60 * 1000;
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
@@ -28,14 +29,16 @@ export function lockFixableFindings(audit, lockfile = {}) {
 
 function main() {
   const findings = [];
+  const timeout = configuredTimeoutMs("CRABPOT_NPM_TIMEOUT_MS", defaultNpmTimeoutMs);
   for (const fixture of fixtureLockDirectories()) {
     const lockfile = JSON.parse(readFileSync(path.join(fixture.path, "package-lock.json"), "utf8"));
-    const result = spawnSync("npm", ["audit", "--package-lock-only", "--omit=dev", "--json"], {
+    const result = runOwnedCommand("npm", ["audit", "--package-lock-only", "--omit=dev", "--json"], {
       cwd: fixture.path,
       encoding: "utf8",
       maxBuffer: 16 * 1024 * 1024,
+      timeout,
     });
-    const audit = parseAuditResult(result, fixture.id);
+    const audit = parseAuditResult(result, fixture.id, timeout);
     for (const finding of lockFixableFindings(audit, lockfile)) {
       findings.push({ fixture: fixture.id, ...finding });
     }
@@ -67,8 +70,11 @@ function fixtureLockDirectories() {
     .sort((left, right) => left.id.localeCompare(right.id));
 }
 
-export function parseAuditResult(result, fixture) {
+export function parseAuditResult(result, fixture, timeout) {
   if (result.error) {
+    if (result.error.code === "ETIMEDOUT" && !result.cleanupError) {
+      throw new Error(`${fixture}: npm audit timed out after ${timeout}ms`);
+    }
     throw result.error;
   }
   if (result.signal) {

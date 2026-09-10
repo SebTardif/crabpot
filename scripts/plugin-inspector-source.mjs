@@ -1,8 +1,8 @@
-import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "./manifest-lib.mjs";
+import { configuredTimeoutMs, runOwnedCommand } from "./owned-command.mjs";
 
 export const pluginInspectorRef = "2e21b3b48aa06fea30b08202f4c6be13c1f3216a";
 export const pluginInspectorPackage = "@openclaw/plugin-inspector@0.3.25";
@@ -155,7 +155,7 @@ function npmCommand() {
 
 function readGitHead(checkoutDir) {
   const timeout = configuredTimeoutMs("CRABPOT_GIT_TIMEOUT_MS", defaultGitTimeoutMs);
-  const result = spawnSync("git", ["-C", checkoutDir, "rev-parse", "HEAD"], {
+  const result = runOwnedCommand("git", ["-C", checkoutDir, "rev-parse", "HEAD"], {
     encoding: "utf8",
     timeout,
   });
@@ -171,14 +171,13 @@ function readGitHead(checkoutDir) {
   return result.stdout.trim();
 }
 
-export function run(command, commandArgs, cwd = repoRoot) {
+function run(command, commandArgs, cwd = repoRoot) {
   const timeout = command === npmCommand()
     ? configuredTimeoutMs("CRABPOT_NPM_TIMEOUT_MS", defaultNpmTimeoutMs)
     : configuredTimeoutMs("CRABPOT_GIT_TIMEOUT_MS", defaultGitTimeoutMs);
-  const result = spawnSync(command, commandArgs, {
+  const result = runOwnedCommand(command, commandArgs, {
     cwd,
     encoding: "utf8",
-    shell: process.platform === "win32" && command === npmCommand(),
     stdio: "pipe",
     timeout,
   });
@@ -197,16 +196,4 @@ export function run(command, commandArgs, cwd = repoRoot) {
     }
     throw new Error(`${command} ${commandArgs.join(" ")} failed with exit code ${result.status}`);
   }
-}
-
-export function configuredTimeoutMs(envName, fallback) {
-  const raw = process.env[envName];
-  if (!raw) {
-    return fallback;
-  }
-  const parsed = Number.parseInt(raw, 10);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    throw new Error(`${envName} must be a positive integer timeout in milliseconds`);
-  }
-  return parsed;
 }

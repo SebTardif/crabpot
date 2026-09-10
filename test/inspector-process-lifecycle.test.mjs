@@ -111,7 +111,7 @@ for (const route of ["source", "package", "bin"]) {
     timeout: 25_000,
   }, async (t) => {
     const fixture = await createFixture(t);
-    const config = path.join(fixture.root, "configuration \u03a9.json");
+    const config = path.join(fixture.root, "configuration \u03a9 %PATH%.json");
     const out = path.join(fixture.root, "report output");
     const outcome = await runSmoke(fixture, { route, args: ["--config", config, "--out", out, "--check"] });
     assert.equal(outcome.watchdog, false);
@@ -142,7 +142,7 @@ test("inspector smoke preserves a normal nonzero status and both streams", {
 test("inspector smoke rejects invalid execution budgets before starting the command", {
   timeout: 60_000,
 }, async (t) => {
-  for (const timeout of ["0", "-1", "1.5", "250ms", "1e3", "Infinity", "NaN", "2147483648"]) {
+  for (const timeout of ["0", "-1", "1.5", "250ms", "1e3", "Infinity", "NaN", "2147483648", "250\n"]) {
     await t.test(timeout, async (t) => {
       const fixture = await createFixture(t);
       const outcome = await runSmoke(fixture, { timeout });

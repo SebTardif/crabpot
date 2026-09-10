@@ -383,6 +383,117 @@ for (const ownerLost of [false, true]) {
   });
 }
 
+for (const phase of ["preconnection", "late connection"]) {
+  test(`Windows cancelled bootstrap cleans ${phase} without issuing a command`, {
+    skip: process.platform !== "win32", timeout: 30_000,
+  }, async (t) => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "crabpot connection owner "));
+    const ownerPath = await copyOwner(root);
+    const helperReady = path.join(root, "helper-ready.json");
+    const releaseFile = path.join(root, "helper-release");
+    const rescueFile = path.join(root, "helper-rescue");
+    const escapeFile = path.join(root, "helper-escape.json");
+    const resultFile = path.join(root, "result.json");
+    const commandMarker = path.join(root, "command-started");
+    const requestMarker = path.join(root, "request-issued");
+    const stopMarker = path.join(root, "stopped-before-connection");
+    const original = await readFile(new URL("../scripts/owned-command-windows.ps1", import.meta.url), "utf8");
+    const connection = "    $pipe.Connect(5000)";
+    assert.equal(original.split(connection).length, 2);
+    const ps = (value) => `'${value.replaceAll("'", "''")}'`;
+    const blocked = original.replace(connection, `
+        $fixtureExpiry = [System.Threading.CancellationTokenSource]::new()
+        $fixtureKill = [System.Delegate]::CreateDelegate(
+            [System.Action], [System.Diagnostics.Process]::GetCurrentProcess(), "Kill")
+        $fixtureRegistration = $fixtureExpiry.Token.Register($fixtureKill)
+        $expiresAt = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() + 20000
+        $fixtureExpiry.CancelAfter(20000)
+        $live = @{ pid = $PID; phase = "preconnection"; expiresAtMs = $expiresAt } | ConvertTo-Json -Compress
+        [System.IO.File]::WriteAllText(${ps(helperReady + ".pending")}, $live)
+        [System.IO.File]::Move(${ps(helperReady + ".pending")}, ${ps(helperReady)})
+        while (-not [System.IO.File]::Exists(${ps(releaseFile)})) {
+            if ([System.IO.File]::Exists(${ps(rescueFile)})) {
+                $escape = @{ rescued = $true } | ConvertTo-Json -Compress
+                [System.IO.File]::WriteAllText(${ps(escapeFile + ".pending")}, $escape)
+                [System.IO.File]::Move(${ps(escapeFile + ".pending")}, ${ps(escapeFile)})
+                exit 99
+            }
+            Start-Sleep -Milliseconds 20
+        }
+        ${connection}
+    `);
+    await writeFile(path.join(root, "scripts/owned-command-windows.ps1"), blocked);
+    await copyFile(new URL("../scripts/owned-command-windows.cs", import.meta.url),
+      path.join(root, "scripts/owned-command-windows.cs"));
+    if (phase === "late connection") {
+      const owner = await readFile(ownerPath, "utf8");
+      const accept = '  server.once("connection", (connection) => {';
+      assert.equal(owner.split(accept).length, 2);
+      // Cancel at delivery of the real connection. Observe the actual write,
+      // so killing the helper cannot hide an incorrectly issued request.
+      await writeFile(ownerPath, `import { writeFileSync } from "node:fs";\n` + owner.replace(accept, `${accept}
+        const send = connection.write.bind(connection);
+        connection.write = (...args) => {
+          if (typeof args[0] === "string" && args[0].startsWith("{")) {
+            writeFileSync(${JSON.stringify(requestMarker)}, "issued");
+          }
+          return send(...args);
+        };
+        stop();
+        writeFileSync(${JSON.stringify(stopMarker)}, "stopped");
+      `));
+    }
+    const errors = [];
+    const worker = new Worker(`
+      const { workerData } = require("node:worker_threads");
+      setInterval(() => {}, 1000);
+      import(workerData.owner).then(({ runOwnedCommand }) => {
+        const result = runOwnedCommand(process.execPath, ["-e", workerData.command], { timeout: 1000 });
+        const fs = require("node:fs");
+        fs.writeFileSync(workerData.result + ".pending", JSON.stringify(result));
+        fs.renameSync(workerData.result + ".pending", workerData.result);
+      });
+    `, { eval: true, workerData: {
+      owner: pathToFileURL(ownerPath).href, result: resultFile,
+      command: `require("node:fs").writeFileSync(${JSON.stringify(commandMarker)}, "started")`,
+    } });
+    worker.on("error", (error) => errors.push(error));
+    let helperPid;
+    t.after(async () => {
+      let closed = false;
+      try {
+        await writeFile(rescueFile, "stop");
+        if (helperPid) closed = await waitForExit(helperPid, 22_000);
+      } finally {
+        await worker.terminate();
+        if (closed) await rm(root, { recursive: true, force: true });
+      }
+      assert.equal(closed, true, "controlled helper must close before fixture removal");
+    });
+    const ready = await readReceipt(helperReady, 14_000, () => errors.map(String).join("\n"));
+    assert.equal(ready.phase, "preconnection");
+    assert.ok(Number.isSafeInteger(ready.pid) && ready.pid > 0);
+    helperPid = ready.pid;
+    assert.equal(process.kill(helperPid, 0), true, "actual helper must be alive before cancellation");
+    if (phase === "late connection") await writeFile(releaseFile, "connect");
+    const result = await readReceipt(resultFile, 14_000, () => errors.map(String).join("\n"));
+    assert.ok(result.error);
+    if (phase === "preconnection") assert.equal(result.error.code, "EOWNERSTART");
+    const closed = await waitForExit(helperPid, 100);
+    t.diagnostic(`phase=${phase}; error=${result.error.code}; helperClosedBeforeRescue=${closed}`);
+    assert.ok(Date.now() < ready.expiresAtMs, "cleanup assertion must precede independent fixture expiry");
+    if (phase === "late connection") {
+      assert.equal(await readFile(stopMarker, "utf8"), "stopped");
+      await assert.rejects(readFile(requestMarker), { code: "ENOENT" });
+    }
+    assert.equal(closed, true, "cancelled helper must exit before cooperative rescue");
+    assert.equal(result.cleanupError, undefined, "closed helper with no issued request has known cleanup");
+    await assert.rejects(readFile(escapeFile), { code: "ENOENT" });
+    await assert.rejects(readFile(commandMarker), { code: "ENOENT" });
+    assert.deepEqual(errors, []);
+  });
+}
+
 for (const [ownerLost, guarded] of [[false, true], [true, true], [false, false], [true, false]]) {
   test(`Windows actual compiler ${guarded ? "exits" : "negative control survives"} on ${ownerLost ? "owner loss" : "startup expiry"}`, {
     skip: process.platform !== "win32", timeout: 45_000,

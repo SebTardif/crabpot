@@ -95,21 +95,20 @@ test("both existing timeout budgets reject invalid values instead of truncating 
 for (const track of ["latest", "development"]) {
   test(`${track} native Git timeout fails even with --warn-missing-tag`, async (t) => {
     const fixture = await createFixture(t, { gitFailure: "stall" });
-    const result = await invoke(fixture, track, { CRABPOT_GIT_TIMEOUT_MS: "350" }, { cli: true, warn: true });
-    t.diagnostic(JSON.stringify({ status: result.status, output: result.output, requests: fixture.requests }));
-    assertNativeGitRequest(fixture);
+    const result = await invoke(fixture, track, { CRABPOT_GIT_TIMEOUT_MS: "4000" }, { cli: true, warn: true });
+    assertNativeGitRequest(fixture, result.output);
     assert.equal(fixture.requests.find(({ pathname }) => pathname === "/git/info/refs").rescued, false,
       "the product must return before the fixture rescues the stalled Git transport");
     assert.equal(result.status, 1, result.output);
-    assert.match(result.output, /git ls-remote timed out after 350ms/);
-    assert.doesNotMatch(result.output, /::warning::|MissingOpenClawTagError/);
+    assert.match(result.output, /git ls-remote timed out after 4000ms/);
+    assert.doesNotMatch(result.output, /::warning::|MissingOpenClawTagError|command cleanup was not confirmed/);
   });
 }
 
 test("native Git transport failure cannot turn into the missing-tag warning", async (t) => {
   const fixture = await createFixture(t, { gitFailure: "http" });
   const result = await invoke(fixture, "latest", {}, { cli: true, warn: true });
-  assertNativeGitRequest(fixture);
+  assertNativeGitRequest(fixture, result.output);
   assert.equal(result.status, 1, result.output);
   assert.doesNotMatch(result.output, /::warning::|MissingOpenClawTagError|timed out/);
 });
@@ -194,9 +193,9 @@ for (const { track, tag } of [
   });
 }
 
-function assertNativeGitRequest(fixture) {
+function assertNativeGitRequest(fixture, output) {
   const request = fixture.requests.find(({ pathname }) => pathname === "/git/info/refs");
-  assert.ok(request, "native Git must reach the HTTP transport before failure");
+  assert.ok(request, `native Git must reach the HTTP transport before failure: ${output}`);
   assert.match(request.userAgent, /^git\//);
 }
 

@@ -14,30 +14,30 @@ Status: PASS
 
 | Metric                     | Value |
 | -------------------------- | ----- |
-| Issue findings             | 358   |
-| Open issue findings        | 358   |
+| Issue findings             | 359   |
+| Open issue findings        | 359   |
 | Runtime-covered findings   | 0     |
 | Runtime-partial findings   | 0     |
 | 🔴 P0                      | 9     |
-| 🟠 P1                      | 123   |
+| 🟠 P1                      | 124   |
 | Open 🔴 P0                 | 9     |
-| Open 🟠 P1                 | 123   |
+| Open 🟠 P1                 | 124   |
 | Live issues                | 9     |
 | Live P0 issues             | 9     |
-| Compat gaps                | 107   |
+| Compat gaps                | 108   |
 | Deprecation warnings       | 22    |
 | Inspector gaps             | 156   |
 | Open inspector gaps        | 156   |
 | Runtime coverage artifacts | 0     |
 | Upstream metadata          | 64    |
-| Contract probes            | 251   |
+| Contract probes            | 252   |
 
 ## Triage Overview
 
 | Class               | Count | P0 | Meaning                                                                                                                                                  |
 | ------------------- | ----- | -- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | live-issue          | 9     | 9  | Potential runtime breakage in the target OpenClaw/plugin pair. P0 only when it is not a deprecated compat seam.                                          |
-| compat-gap          | 107   | -  | Compatibility behavior is needed but missing from the target OpenClaw compat registry.                                                                   |
+| compat-gap          | 108   | -  | Compatibility behavior is needed but missing from the target OpenClaw compat registry.                                                                   |
 | deprecation-warning | 22    | -  | Plugin uses a supported but deprecated compatibility seam; keep it wired while migration exists.                                                         |
 | inspector-gap       | 156   | -  | Plugin Inspector needs stronger capture/probe evidence before making contract judgments. Runtime-covered rows are proof-backed and not open report work. |
 | upstream-metadata   | 64    | -  | Plugin package or manifest metadata should improve upstream; not a target OpenClaw live break by itself.                                                 |
@@ -530,6 +530,12 @@ _none_
   - state: open · compat:missing
   - evidence:
     - channel.runtime.envelope-config-metadata
+
+- 🟠 P1 **msteams** `compat-gap` `core-compat-adapter`
+  - **sdk-export-missing**: msteams: plugin SDK import aliases are missing from target package exports
+  - state: open · compat:untracked
+  - evidence:
+    - [openclaw/plugin-sdk/blob-runtime @ messenger-DbWgzI01.cjs:21](https://github.com/openclaw/openclaw/blob/2d2ddc43d0dcf71f31283d780f9fe9ff4cc04fe4/extensions/msteams/dist/messenger-DbWgzI01.cjs#L21)
 
 - 🟠 P1 **nemoclaw** `compat-gap` `core-compat-adapter`
   - **missing-compat-record**: nemoclaw: compat-dependent behavior lacks registry coverage
@@ -3340,6 +3346,12 @@ _none_
   - evidence:
     - channel.runtime.envelope-config-metadata
 
+- 🟠 P1 **msteams** `compat-gap` `core-compat-adapter`
+  - **sdk-export-missing**: msteams: plugin SDK import aliases are missing from target package exports
+  - state: open · compat:untracked
+  - evidence:
+    - [openclaw/plugin-sdk/blob-runtime @ messenger-DbWgzI01.cjs:21](https://github.com/openclaw/openclaw/blob/2d2ddc43d0dcf71f31283d780f9fe9ff4cc04fe4/extensions/msteams/dist/messenger-DbWgzI01.cjs#L21)
+
 - 🟠 P1 **nemoclaw** `inspector-gap` `inspector-follow-up`
   - **before-tool-call-probe**: nemoclaw: before_tool_call needs terminal/block/approval probes
   - state: open · compat:untracked
@@ -5708,6 +5720,12 @@ _none_
   - id: `sdk.import.package-export-cold-import:mocrane-wecom`
   - evidence:
     - [openclaw/plugin-sdk @ plugin-sdk-shim.ts:30](https://github.com/TencentCloud-Lighthouse/openclaw-wecom/blob/5edda565415e29e30f6388c2160f750bb026ec32/src/compat/plugin-sdk-shim.ts#L30)
+
+- 🟠 P1 **msteams** `sdk-alias`
+  - contract: Every observed OpenClaw plugin SDK import remains exported by the target OpenClaw package.
+  - id: `sdk.import.package-export-cold-import:msteams`
+  - evidence:
+    - [openclaw/plugin-sdk/blob-runtime @ messenger-DbWgzI01.cjs:21](https://github.com/openclaw/openclaw/blob/2d2ddc43d0dcf71f31283d780f9fe9ff4cc04fe4/extensions/msteams/dist/messenger-DbWgzI01.cjs#L21)
 
 - 🟠 P1 **openclaw-telemetry** `sdk-alias`
   - contract: Every observed OpenClaw plugin SDK import remains exported by the target OpenClaw package.

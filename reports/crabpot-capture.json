@@ -10,11 +10,11 @@
     "fixtureCount": 59,
     "registrationCount": 378,
     "hookCount": 129,
-    "sdkImportCount": 2449,
+    "sdkImportCount": 2604,
     "packageEntrypointCount": 119,
-    "issueProbeCount": 251,
+    "issueProbeCount": 252,
     "inspectorShimRequiredCount": 212,
-    "compatAliasRequiredCount": 41
+    "compatAliasRequiredCount": 42
   },
   "fixtures": [
     {
@@ -1808,7 +1808,30 @@
           }
         }
       ],
-      "sdkImports": [],
+      "sdkImports": [
+        {
+          "id": "sdk.openclaw/plugin-sdk/logging-core:lossless-claw:plugins-lossless-claw-src-batch-dedup-ts-65",
+          "fixture": "lossless-claw",
+          "specifier": "openclaw/plugin-sdk/logging-core",
+          "ref": "plugins/lossless-claw/src/batch-dedup.ts:65",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/logging-core:lossless-claw:plugins-lossless-claw-src-lcm-file-log-ts-198",
+          "fixture": "lossless-claw",
+          "specifier": "openclaw/plugin-sdk/logging-core",
+          "ref": "plugins/lossless-claw/src/lcm-file-log.ts:198",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        }
+      ],
       "packageEntrypoints": [
         {
           "id": "package.extension:lossless-claw:plugins-lossless-claw-dist-index-js",
@@ -14428,7 +14451,1691 @@
         }
       ],
       "hooks": [],
-      "sdkImports": [],
+      "sdkImports": [
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-helpers:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-7",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:7",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-helpers:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-helpers:msteams:plugins-msteams-crabpot-package-dist-send-Bw4W8RO7-cjs-11",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:11",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-helpers:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-42",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-helpers",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:42",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-id:msteams:plugins-msteams-crabpot-package-dist-approval-handler-runtime-CoTQG4FS-cjs-5",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:5",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-id:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-18",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:18",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-id:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-6",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:6",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-id:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-7",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:7",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/account-id:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-17",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/account-id",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:17",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/agent-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-32",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/agent-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:32",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/allow-from:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-24",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:24",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/allow-from:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-5",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:5",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/allow-from:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-7",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:7",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/allow-from:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-6",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:6",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/allow-from:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-15",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/allow-from",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:15",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-auth-runtime:msteams:plugins-msteams-crabpot-package-dist-thread-session-p8FNgohv-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-auth-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-delivery-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-20",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-delivery-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:20",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-gateway-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-27",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-gateway-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:27",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-handler-adapter-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-6",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-handler-adapter-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:6",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-handler-runtime:msteams:plugins-msteams-crabpot-package-dist-approval-handler-runtime-CoTQG4FS-cjs-7",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-handler-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:7",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-native-runtime:msteams:plugins-msteams-crabpot-package-dist-approval-handler-runtime-CoTQG4FS-cjs-6",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-native-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:6",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-native-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-21",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-native-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:21",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/approval-runtime:msteams:plugins-msteams-crabpot-package-dist-approval-card-CPNH-q3P-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/approval-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-card-CPNH_q3P.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/blob-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-21",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/blob-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21",
+          "support": "compat-alias-required",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-actions:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-22",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-actions",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:22",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-config-helpers:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-config-helpers",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-config-schema:msteams:plugins-msteams-crabpot-package-dist-config-schema-D22Lr1Qk-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-config-schema",
+          "ref": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-core:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-7",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-core",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:7",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-core:msteams:plugins-msteams-crabpot-package-dist-config-schema-D22Lr1Qk-cjs-1",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-core",
+          "ref": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs:1",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-entry-contract:msteams:plugins-msteams-crabpot-package-dist-index-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-entry-contract",
+          "ref": "plugins/msteams/.crabpot-package/dist/index.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-entry-contract:msteams:plugins-msteams-crabpot-package-dist-setup-entry-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-entry-contract",
+          "ref": "plugins/msteams/.crabpot-package/dist/setup-entry.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-inbound:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-26",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-inbound",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:26",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-ingress-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-28",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-ingress-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:28",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-outbound:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-outbound:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-outbound:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-outbound:msteams:plugins-msteams-crabpot-package-dist-send-Bw4W8RO7-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-outbound:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-outbound",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-pairing:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-pairing",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-pairing:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-4",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-pairing",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:4",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-pairing:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-39",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-pairing",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:39",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-policy:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-policy:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-5",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:5",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-runtime-context:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-11",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-runtime-context",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:11",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-secret-basic-runtime:msteams:plugins-msteams-crabpot-package-dist-secret-contract-api-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-secret-basic-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/secret-contract-api.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-send-result:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-12",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-send-result",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:12",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-setup:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-11",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-setup",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:11",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-status:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-28",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-status",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:28",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-status:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-status",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-targets:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-23",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-targets",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:23",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/channel-targets:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/channel-targets",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/collection-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-37",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/collection-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:37",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/context-visibility-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-29",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/context-visibility-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:29",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/dangerous-name-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-25",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/dangerous-name-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:25",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/dangerous-name-runtime:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/dangerous-name-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/dangerous-name-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-41",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/dangerous-name-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:41",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/dedupe-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-35",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/dedupe-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:35",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/directory-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-12",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/directory-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:12",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/directory-runtime:msteams:plugins-msteams-crabpot-package-dist-directory-contract-api-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/directory-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/directory-contract-api.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/error-runtime:msteams:plugins-msteams-crabpot-package-dist-adapter-runtime-DDuc7sKJ-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/error-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/adapter.runtime-DDuc7sKJ.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/error-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-23",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/error-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:23",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/error-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-25",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/error-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:25",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/extension-shared:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-33",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/extension-shared",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:33",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/fetch-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/fetch-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/file-lock:msteams:plugins-msteams-crabpot-package-dist-polls-BBdZPx-R-cjs-4",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/file-lock",
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:4",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/file-lock:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-12",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/file-lock",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:12",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/gateway-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-38",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/gateway-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:38",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/global-singleton:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-22",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/global-singleton",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:22",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/html-entity-runtime:msteams:plugins-msteams-crabpot-package-dist-reaction-types-zP91Ncwk-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/html-entity-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/reaction-types-zP91Ncwk.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/html-entity-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-18",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/html-entity-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:18",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/interactive-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/interactive-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/keyed-async-queue:msteams:plugins-msteams-crabpot-package-dist-polls-BBdZPx-R-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/keyed-async-queue",
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/lazy-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/lazy-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/lazy-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-7",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/lazy-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:7",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/lazy-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-5",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/lazy-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:5",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/markdown-table-runtime:msteams:plugins-msteams-crabpot-package-dist-send-Bw4W8RO7-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/markdown-table-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/media-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-26",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/media-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:26",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/media-runtime:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/media-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/media-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-18",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/media-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:18",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/number-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-11",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:11",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/number-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/number-runtime:msteams:plugins-msteams-crabpot-package-dist-polls-BBdZPx-R-cjs-5",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:5",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/number-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/number-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-20",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/number-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:20",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/outbound-media:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-15",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/outbound-media",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:15",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/outbound-media:msteams:plugins-msteams-crabpot-package-dist-send-Bw4W8RO7-cjs-12",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/outbound-media",
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:12",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/plugin-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-34",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/plugin-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:34",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/plugin-state-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-36",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/plugin-state-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:36",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/provider-auth:msteams:plugins-msteams-crabpot-package-dist-oauth-BeROaYf0-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/provider-auth",
+          "ref": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/provider-auth-runtime:msteams:plugins-msteams-crabpot-package-dist-oauth-BeROaYf0-cjs-4",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/provider-auth-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs:4",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/provider-http:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/provider-http",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/provider-http:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/provider-http",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/provider-http:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-16",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/provider-http",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:16",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/qa-runner-runtime:msteams:plugins-msteams-crabpot-package-dist-qa-runner-api-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/qa-runner-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/qa-runner-api.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/reply-chunking:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-24",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/reply-chunking",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:24",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/reply-history:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-30",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/reply-history",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:30",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/reply-payload:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/reply-payload",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/reply-payload:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/reply-payload",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/reply-payload:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-16",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/reply-payload",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:16",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/reply-reference:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-19",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/reply-reference",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:19",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/retry-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/retry-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/retry-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-15",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/retry-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:15",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/routing:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-22",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/routing",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:22",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/routing:msteams:plugins-msteams-crabpot-package-dist-thread-session-p8FNgohv-cjs-4",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/routing",
+          "ref": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs:4",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-config-snapshot:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-31",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-config-snapshot",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:31",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-doctor-migrations:msteams:plugins-msteams-crabpot-package-dist-doctor-contract-api-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-doctor-migrations",
+          "ref": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-env:msteams:plugins-msteams-crabpot-package-dist-approval-handler-runtime-CoTQG4FS-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-env",
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-handler.runtime-CoTQG4FS.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-env:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-20",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-env",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:20",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-env:msteams:plugins-msteams-crabpot-package-dist-oauth-BeROaYf0-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-env",
+          "ref": "plugins/msteams/.crabpot-package/dist/oauth-BeROaYf0.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-group-policy:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-26",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-group-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:26",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-group-policy:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-11",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-group-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:11",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-group-policy:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-40",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-group-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:40",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/runtime-store:msteams:plugins-msteams-crabpot-package-dist-runtime-gZTAuFux-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/runtime-store",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-gZTAuFux.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-file:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-16",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-file",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:16",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-file-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-file-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-input:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-15",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:15",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-input:msteams:plugins-msteams-crabpot-package-dist-config-schema-D22Lr1Qk-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "ref": "plugins/msteams/.crabpot-package/dist/config-schema-D22Lr1Qk.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-input:msteams:plugins-msteams-crabpot-package-dist-configured-state-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "ref": "plugins/msteams/.crabpot-package/dist/configured-state.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-input:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-19",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:19",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/secret-input:msteams:plugins-msteams-crabpot-package-dist-secret-input-C65t6kjM-cjs-1",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/secret-input",
+          "ref": "plugins/msteams/.crabpot-package/dist/secret-input-C65t6kjM.cjs:1",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/session-store-paths:msteams:plugins-msteams-crabpot-package-dist-doctor-contract-api-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/session-store-paths",
+          "ref": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/setup:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-12",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/setup",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:12",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/setup-tools:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/setup-tools",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/ssrf-policy:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/ssrf-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/ssrf-policy:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/ssrf-policy",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/ssrf-runtime:msteams:plugins-msteams-crabpot-package-dist-adapter-runtime-DDuc7sKJ-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/adapter.runtime-DDuc7sKJ.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/ssrf-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-10",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:10",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/ssrf-runtime:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-17",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:17",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/ssrf-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-19",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/ssrf-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:19",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/status-helpers:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-15",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/status-helpers",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:15",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-approval-card-CPNH-q3P-cjs-1",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/approval-card-CPNH_q3P.cjs:1",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-16",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:16",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-setup-ChwkwdLk-cjs-4",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.setup-ChwkwdLk.cjs:4",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-doctor-contract-api-cjs-6",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/doctor-contract-api.cjs:6",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-8",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:8",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-polls-BBdZPx-R-cjs-3",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/polls-BBdZPx_R.cjs:3",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-6",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:6",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-send-Bw4W8RO7-cjs-9",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/send-Bw4W8RO7.cjs:9",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-coerce-runtime:msteams:plugins-msteams-crabpot-package-dist-thread-session-p8FNgohv-cjs-2",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-coerce-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/thread-session-p8FNgohv.cjs:2",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-normalization-runtime:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-normalization-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/string-normalization-runtime:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-18",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/string-normalization-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:18",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-chunking:msteams:plugins-msteams-crabpot-package-dist-channel-Cdm6-HsU-cjs-27",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel-Cdm6-HsU.cjs:27",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-chunking:msteams:plugins-msteams-crabpot-package-dist-channel-runtime-5ZQlfG-cjs-13",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "ref": "plugins/msteams/.crabpot-package/dist/channel.runtime-__5ZQlfG.cjs:13",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-chunking:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-11",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:11",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-chunking:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-19",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-chunking",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:19",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-utility-runtime:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-14",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-utility-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:14",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-utility-runtime:msteams:plugins-msteams-crabpot-package-dist-resolve-allowlist-CoKmLXYe-cjs-15",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-utility-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/resolve-allowlist-CoKmLXYe.cjs:15",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/text-utility-runtime:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-21",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/text-utility-runtime",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:21",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/web-media:msteams:plugins-msteams-crabpot-package-dist-messenger-DbWgzI01-cjs-25",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/web-media",
+          "ref": "plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:25",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/webhook-ingress:msteams:plugins-msteams-crabpot-package-dist-runtime-api-cjs-20",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/webhook-ingress",
+          "ref": "plugins/msteams/.crabpot-package/dist/runtime-api.cjs:20",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        },
+        {
+          "id": "sdk.openclaw/plugin-sdk/webhook-ingress:msteams:plugins-msteams-crabpot-package-dist-src-B-Qc6lj-cjs-43",
+          "fixture": "msteams",
+          "specifier": "openclaw/plugin-sdk/webhook-ingress",
+          "ref": "plugins/msteams/.crabpot-package/dist/src-B--Qc6lj.cjs:43",
+          "support": "target-exported",
+          "assertions": [
+            "package export exists",
+            "cold import resolves without plugin credentials"
+          ]
+        }
+      ],
       "packageEntrypoints": [
         {
           "id": "package.extension:msteams:plugins-msteams-crabpot-package-index-ts",
@@ -39166,6 +40873,19 @@
       "target": "sdk-alias",
       "evidence": [
         "openclaw/plugin-sdk @ plugins/mocrane-wecom/src/compat/plugin-sdk-shim.ts:30"
+      ],
+      "assertions": [
+        "package export exists",
+        "migration metadata is visible when alias is missing"
+      ]
+    },
+    {
+      "id": "sdk.import.package-export-cold-import:msteams",
+      "fixture": "msteams",
+      "priority": "P1",
+      "target": "sdk-alias",
+      "evidence": [
+        "openclaw/plugin-sdk/blob-runtime @ plugins/msteams/.crabpot-package/dist/messenger-DbWgzI01.cjs:21"
       ],
       "assertions": [
         "package export exists",

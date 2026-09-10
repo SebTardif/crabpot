@@ -2,8 +2,10 @@
 
 ## 0.2.2 - Unreleased
 
+- Bound inspector and checkout commands through descendant cleanup, including Windows Job ownership, strict timeout settings, and combined captured-output limits; preserve uncapped inherited smoke output. Thanks @SebTardif for the initial timeout repair.
+- Reject fixture checkout and payload escapes, including linked destination components and archive metadata links, before materialization can write outside the selected fixture; preserve valid nested paths and dotted names. Thanks @bunlongheng.
 - Failed npm fixture packs now stop materialization and dependent checks after collecting availability evidence, including when report writing is disabled; successful pinned fallbacks remain supported. Availability reports now label the resolved CLI or environment fixture selection.
-- Adopted the inspector source repair for credential-free model-auth registration capture; published-package smoke remains on the older 0.3.24 release.
+- Adopted inspector 0.3.25 in both source and published-package modes for bounded capture/probes, serial service lifecycle probes, CommonJS SDK mocks, Gateway response validation, and credential-free model-auth binding.
 - Removed the obsolete bundled QQ Bot source fixture that blocked development dashboard materialization after OpenClaw externalized the plugin; retained the Tencent QQbot git fixture and its channel/tool coverage.
 - Restored native lifecycle profiling through root registry activation and rejected malformed phase timings.
 - Run the development dashboard and advisory HEAD canary on Node 24 for current OpenClaw hosts; keep the pinned Default Track and latest/beta dashboards on Node 22.

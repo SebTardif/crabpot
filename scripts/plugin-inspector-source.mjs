@@ -1,11 +1,14 @@
-import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "./manifest-lib.mjs";
+import { configuredTimeoutMs, runOwnedCommand } from "./owned-command.mjs";
 
-export const pluginInspectorRef = "84ede904fd6e766a9fc4de002f39af87d90c1916";
-export const pluginInspectorPackage = "@openclaw/plugin-inspector@0.3.24";
+export const pluginInspectorRef = "2e21b3b48aa06fea30b08202f4c6be13c1f3216a";
+export const pluginInspectorPackage = "@openclaw/plugin-inspector@0.3.25";
+const defaultGitTimeoutMs = 2 * 60 * 1000;
+const defaultNpmTimeoutMs = 2 * 60 * 1000;
+export const defaultPluginInspectorTimeoutMs = 10 * 60 * 1000;
 
 export async function loadPluginInspector() {
   const publicApi = await import(pathToFileURL(resolvePluginInspectorSourcePath()).href);
@@ -151,9 +154,17 @@ function npmCommand() {
 }
 
 function readGitHead(checkoutDir) {
-  const result = spawnSync("git", ["-C", checkoutDir, "rev-parse", "HEAD"], {
+  const timeout = configuredTimeoutMs("CRABPOT_GIT_TIMEOUT_MS", defaultGitTimeoutMs);
+  const result = runOwnedCommand("git", ["-C", checkoutDir, "rev-parse", "HEAD"], {
     encoding: "utf8",
+    timeout,
   });
+  if (result.error) {
+    if (result.error.code === "ETIMEDOUT") {
+      throw new Error(`git rev-parse HEAD timed out after ${timeout}ms`);
+    }
+    throw result.error;
+  }
   if (result.status !== 0) {
     return null;
   }
@@ -161,13 +172,19 @@ function readGitHead(checkoutDir) {
 }
 
 function run(command, commandArgs, cwd = repoRoot) {
-  const result = spawnSync(command, commandArgs, {
+  const timeout = command === npmCommand()
+    ? configuredTimeoutMs("CRABPOT_NPM_TIMEOUT_MS", defaultNpmTimeoutMs)
+    : configuredTimeoutMs("CRABPOT_GIT_TIMEOUT_MS", defaultGitTimeoutMs);
+  const result = runOwnedCommand(command, commandArgs, {
     cwd,
     encoding: "utf8",
-    shell: process.platform === "win32" && command === npmCommand(),
     stdio: "pipe",
+    timeout,
   });
   if (result.error) {
+    if (result.error.code === "ETIMEDOUT") {
+      throw new Error(`${command} ${commandArgs.join(" ")} timed out after ${timeout}ms`);
+    }
     throw result.error;
   }
   if (result.status !== 0) {

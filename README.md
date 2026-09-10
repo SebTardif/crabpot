@@ -10,14 +10,14 @@
 ## Reporting Data
 
 `main` follows a promoted green OpenClaw source pin plus npm `latest` plugin artifacts, with bundled fixtures source-packed from that pinned checkout. `crab-beta` follows beta npm dist-tags for externalized packages and source-packs bundled fixtures. `crab-development` checks `openclaw/openclaw` main against source-packed official plugin artifacts from that same OpenClaw checkout.
-- **Last dashboard update:** Sep 08, 2026, 14:45 UTC
+- **Last dashboard update:** Sep 10, 2026, 02:42 UTC
 <!-- crabpot-tracks:start -->
 - **Source:** `github-default-pin`
 - **OpenClaw version:** `2026.8.1`
 - **OpenClaw SHA:** `5570c5ffac86`
 - **Dashboard target:** `openclaw/openclaw@5570c5ffac86 + npm latest plugin artifacts`
 - **Plugin artifacts:** `npm latest fixture set plus bundled source-packed fixtures`
-- **GitHub report run:** [34238577814](https://github.com/openclaw/crabpot/actions/runs/34238577814)
+- **GitHub report run:** [34429241374](https://github.com/openclaw/crabpot/actions/runs/34429241374)
 <!-- crabpot-tracks:end -->
 
 <!-- crabpot-summary:start -->
@@ -27,17 +27,17 @@
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | Fixtures               | 59                                                                                                                  |
 | Hard breakages         | 0                                                                                                                   |
-| Warnings               | 121                                                                                                                 |
+| Warnings               | 122                                                                                                                 |
 | Suggestions            | 237                                                                                                                 |
-| Issues                 | 358                                                                                                                 |
+| Issues                 | 359                                                                                                                 |
 | P0 issues              | [🔴 P0 9](reports/crabpot-issues.md#p0-live-issues)                                                                 |
-| P1 issues              | [🟠 P1 123](reports/crabpot-issues.md#triage-summary)                                                               |
+| P1 issues              | [🟠 P1 124](reports/crabpot-issues.md#triage-summary)                                                               |
 | Live issues            | 9 total / 9 P0                                                                                                      |
-| Compat gaps            | 107                                                                                                                 |
+| Compat gaps            | 108                                                                                                                 |
 | Deprecation warnings   | 22                                                                                                                  |
 | Inspector gaps         | 156                                                                                                                 |
 | Upstream metadata      | 64                                                                                                                  |
-| Contract probes        | 251                                                                                                                 |
+| Contract probes        | 252                                                                                                                 |
 | Policy failures        | 0                                                                                                                   |
 | Policy warnings        | 1                                                                                                                   |
 | Ref diff failures      | 0                                                                                                                   |
@@ -48,15 +48,15 @@
 | Workspace plan         | 119 entrypoints / 79 installs / 15 builds                                                                           |
 | Platform risks         | 17 Windows / 17 container                                                                                           |
 | Jiti loader candidates | 20                                                                                                                  |
-| Import loop            | p50 3066ms / p95 3108ms / plugin delta RSS 0.7MB / plugin delta CPU 16ms / OpenClaw import 129.1ms / activate 0.5ms |
-| Runtime profile        | p50 5853ms / command p95 5946ms / max RSS 213.6MB / 3 samples/command                                               |
+| Import loop            | p50 2872ms / p95 2880ms / plugin delta RSS 3.1MB / plugin delta CPU 35ms / OpenClaw import 113.5ms / activate 0.5ms |
+| Runtime profile        | p50 6018ms / command p95 6289ms / max RSS 221.3MB / 3 samples/command                                               |
 
 ### OpenClaw Lifecycle Probe
 
-| Phase                      | p50     | p95     |
-| -------------------------- | ------- | ------- |
-| Import (`full`)            | 129.1ms | 144.7ms |
-| Activate (`full:register`) | 0.5ms   | 0.5ms   |
+| Phase                      | p50     | p95   |
+| -------------------------- | ------- | ----- |
+| Import (`full`)            | 113.5ms | 122ms |
+| Activate (`full:register`) | 0.5ms   | 0.6ms |
 
 ### Top Discovered Issues
 
@@ -124,6 +124,24 @@ git submodule update --init --recursive
 
 That command mutates `.gitmodules` and `plugins/*`. Commit those changes when
 you intentionally pin or update fixture revisions.
+
+### Inspector command limits
+
+Inspector smoke and generated-surface commands default to 10 minutes. Inspector
+checkout Git and npm commands default to 2 minutes. Set
+`CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS`, `CRABPOT_GIT_TIMEOUT_MS`, or
+`CRABPOT_NPM_TIMEOUT_MS` to a decimal integer from 1 through 2147483647;
+zero, fractions, trailing text, and infinite timeouts are rejected.
+
+Commands remain synchronous to callers, with a separate bounded supervisor for
+startup, execution, output, and descendant cleanup. Captured checkout and
+generated-surface output retains the 1 MiB combined stdout/stderr limit. Smoke
+output streams through inherited native descriptors without a total-output cap.
+Windows requires 64-bit Windows 10/Server 2016 or newer and Windows PowerShell:
+commands enter their private Job at creation, and setup failures never fall back
+to uncontained execution. A separate helper Job contains bootstrap compiler
+children too. Native Git runs directly; only batch commands use `cmd.exe`.
+This process ownership is not a sandbox for hostile plugin code.
 
 ## Compatibility report
 

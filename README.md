@@ -125,6 +125,24 @@ git submodule update --init --recursive
 That command mutates `.gitmodules` and `plugins/*`. Commit those changes when
 you intentionally pin or update fixture revisions.
 
+### Inspector command limits
+
+Inspector smoke and generated-surface commands default to 10 minutes. Inspector
+checkout Git and npm commands default to 2 minutes. Set
+`CRABPOT_PLUGIN_INSPECTOR_TIMEOUT_MS`, `CRABPOT_GIT_TIMEOUT_MS`, or
+`CRABPOT_NPM_TIMEOUT_MS` to a decimal integer from 1 through 2147483647;
+zero, fractions, trailing text, and infinite timeouts are rejected.
+
+Commands remain synchronous to callers, with a separate bounded supervisor for
+startup, execution, output, and descendant cleanup. Captured checkout and
+generated-surface output retains the 1 MiB combined stdout/stderr limit. Smoke
+output streams through inherited native descriptors without a total-output cap.
+Windows requires 64-bit Windows 10/Server 2016 or newer and Windows PowerShell:
+commands enter their private Job at creation, and setup failures never fall back
+to uncontained execution. A separate helper Job contains bootstrap compiler
+children too. Native Git runs directly; only batch commands use `cmd.exe`.
+This process ownership is not a sandbox for hostile plugin code.
+
 ## Compatibility report
 
 Start with the dashboard at the top of this README. It is the condensed view of

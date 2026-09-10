@@ -33,7 +33,7 @@ function startupError(error, includeCause = true) {
   if (!error) return null;
   const token = (value) => typeof value === "string" && /^[A-Z][A-Z0-9_]{0,63}$/.test(value) ? value : null;
   const message = String(error.message ?? "");
-  const knownMessage = /^(?:command (?:supervisor (?:startup timed out|exceeded its deadline|terminal cleanup receipt was not observed)|owner stopped|output exceeded maxBuffer|timed out after \d+ms)|Windows (?:command adapter startup timed out|Job (?:cleanup receipt missing|extinction receipt was not observed)|helper (?:closure was not observed|did not close after forced termination)|adapter (?:exited without Job extinction receipt|failed \((?:\d+|SIG[A-Z]+)\))))(?:; command cleanup was not confirmed)?$/;
+  const knownMessage = /^(?:command (?:supervisor (?:startup timed out|exceeded its deadline|terminal cleanup receipt was not observed)|owner stopped|output exceeded maxBuffer|timed out after \d+ms)|Windows (?:command adapter startup timed out|Job (?:cleanup receipt missing|extinction receipt was not observed)|helper (?:closure was not observed|did not close after forced termination)|adapter (?:exited without Job extinction receipt|exited before command request|failed \((?:\d+|SIG[A-Z]+)\))))(?:; command cleanup was not confirmed)?$/;
   return {
     code: token(error.code),
     name: ["Error", "TypeError", "SyntaxError", "ReferenceError", "RangeError"].includes(error.name) ? error.name : null,
@@ -491,6 +491,7 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
   let socket;
   let helper;
   let stopped = false;
+  let requestIssued = false;
   let admitted = false;
   let closedJob = false;
   let helperClosed = false;
@@ -499,29 +500,42 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
   let completionResolve;
   let startupTimer;
   let cleanupTimer;
+  let missingJobCleanupError;
   let forcedCloseTimer;
   let finished = false;
   const completion = new Promise((resolve) => { completionResolve = resolve; });
+  const terminateHelper = () => {
+    workerTrace("helper-kill-request", { helperPid: helper?.pid ?? null, helperClosed });
+    try {
+      const signaled = helper?.kill();
+      workerTrace("helper-kill-returned", { attempted: Boolean(helper), signaled: signaled ?? null });
+    } catch (error) {
+      workerTrace("helper-kill-error", { error: startupError(error) });
+      recordFailure(error);
+    }
+  };
   const stop = () => {
     if (stopped) return;
     stopped = true;
-    workerTrace("adapter-stop", { admitted, closedJob, helperClosed, controlEnded });
+    workerTrace("adapter-stop", { requestIssued, admitted, closedJob, helperClosed, controlEnded });
     clearTimeout(startupTimer);
-    socket?.write("STOP\n");
-    workerTrace("helper-stop-write", { connected: Boolean(socket) });
+    if (!requestIssued) {
+      // No request means no command Job can exist; retain the helper handle
+      // until its close event confirms termination and stream closure.
+      recordFailure({ code: "EOWNERCANCELLED", message: "command owner stopped" });
+      terminateHelper();
+      socket?.destroy();
+    } else {
+      socket?.write("STOP\n");
+      workerTrace("helper-stop-write", { connected: Boolean(socket) });
+    }
     cleanupTimer = setTimeout(() => {
       workerTrace("adapter-cleanup-deadline-fired", { admitted, closedJob, helperClosed, controlEnded });
-      result.cleanupError = { code: "EOWNERCLEANUP", message: "Windows Job cleanup receipt missing" };
+      missingJobCleanupError = { code: "EOWNERCLEANUP", message: "Windows Job cleanup receipt missing" };
+      result.cleanupError ??= missingJobCleanupError;
       recordFailure(result.cleanupError);
       socket?.destroy();
-      workerTrace("helper-kill-request", { helperPid: helper?.pid ?? null, helperClosed });
-      try {
-        const signaled = helper?.kill();
-        workerTrace("helper-kill-returned", { attempted: Boolean(helper), signaled: signaled ?? null });
-      } catch (error) {
-        workerTrace("helper-kill-error", { error: startupError(error) });
-        throw error;
-      }
+      terminateHelper();
       helper?.stdout?.destroy();
       helper?.stderr?.destroy();
       if (!helper || helperClosed) { finish(); return; }
@@ -549,6 +563,14 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
     if (!helperClosed || (socket && !controlEnded)) return;
     // The independent control socket must drain before a generic exit fallback.
     if (helperExitError) recordFailure(helperExitError);
+    if (!requestIssued) {
+      if (missingJobCleanupError && result.cleanupError === missingJobCleanupError) {
+        delete result.cleanupError;
+      }
+      recordFailure({ code: "EOWNERNATIVE", message: "Windows adapter exited before command request" });
+      finish();
+      return;
+    }
     if (closedJob) {
       delete result.cleanupError;
     } else {
@@ -584,7 +606,14 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
         pending = pending.slice(end + 1);
         const diagnostic = workerData.startupDiagnosticId &&
           /^DIAG (request-received|owner-monitor-installed|bootstrap-job-assigned|compile-begin|compile-end) (\d{13})$/.exec(line);
-        if (diagnostic) {
+        const timing = workerData.startupDiagnosticId &&
+          /^DIAG request-timing (\d{13}) (\d{13}) (\d{13}) (\d{13})$/.exec(line);
+        if (timing) {
+          workerTrace("helper-request-timing", {
+            helperReadBeginMs: Number(timing[1]), helperReadEndMs: Number(timing[2]),
+            helperParseBeginMs: Number(timing[3]), helperParseEndMs: Number(timing[4]),
+          });
+        } else if (diagnostic) {
           workerTrace(`helper-${diagnostic[1]}`, { helperAtMs: Number(diagnostic[2]) });
         } else if (/^READY \d+$/.test(line) && !admitted) {
           admitted = true;
@@ -618,7 +647,13 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
         }
       }
     });
+    if (stopped || Atomics.load(shared, 1)) {
+      stop();
+      socket.destroy();
+      return;
+    }
     try {
+      workerTrace("request-build-begin");
       const executable = resolveWindowsCommand(command, options.cwd, options.env);
       const batch = /\.(cmd|bat)$/i.test(executable);
       const application = batch
@@ -627,13 +662,26 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
       const commandLine = batch
         ? `${quoteWindowsArg(application)} /d /s /c "${batchCommandLine(executable, args)}"`
         : [executable, ...args].map(quoteWindowsArg).join(" ");
-      socket.write(`${JSON.stringify({
+      const request = `${JSON.stringify({
         application, commandLine, cwd: options.cwd, timeout: options.timeout, cleanup: cleanupMs,
         startupDiagnostic: Boolean(workerData.startupDiagnosticId),
         environment: Object.entries(options.env).filter(([, value]) => value !== undefined)
           .sort(([a], [b]) => a.toUpperCase().localeCompare(b.toUpperCase()))
           .map(([key, value]) => `${key}=${value}`).join("\0") + "\0\0",
-      })}\n`);
+      })}\n`;
+      workerTrace("request-build-end");
+      if (stopped || Atomics.load(shared, 1)) {
+        stop();
+        socket.destroy();
+        return;
+      }
+      // A throwing or partial write may still have issued a request.
+      requestIssued = true;
+      workerTrace("request-write-begin");
+      const accepted = socket.write(request, workerData.startupDiagnosticId ? (error) => {
+        workerTrace("request-write-completed", { errorCode: startupError(error)?.code ?? null });
+      } : undefined);
+      workerTrace("request-write-returned", { backpressure: !accepted });
       if (stopped || Atomics.load(shared, 1)) {
         socket.write("STOP\n");
         workerTrace("helper-stop-write", { connected: true, afterRequest: true });

@@ -11,10 +11,15 @@ try {
     $reader = [System.IO.StreamReader]::new($pipe, $utf8, $false, 4096, $true)
     $writer = [System.IO.StreamWriter]::new($pipe, $utf8, 4096, $true)
     $writer.AutoFlush = $true
+    $readBegin = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     $line = $reader.ReadLine()
+    $readEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     if ($null -eq $line) { exit 1 }
+    $parseBegin = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     $request = $line | ConvertFrom-Json
+    $parseEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     if ($request.startupDiagnostic) {
+        try { $writer.WriteLine("DIAG request-timing $readBegin $readEnd $parseBegin $parseEnd") } catch {}
         try { $writer.WriteLine("DIAG request-received " + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) } catch {}
     }
     # Direct .NET delegates do not depend on the PowerShell runspace while Add-Type blocks.

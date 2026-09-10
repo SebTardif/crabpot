@@ -341,6 +341,7 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
   let admitted = false;
   let closedJob = false;
   let helperClosed = false;
+  let helperExitError;
   let controlEnded = false;
   let completionResolve;
   let startupTimer;
@@ -378,6 +379,8 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
   };
   const maybeFinish = () => {
     if (!helperClosed || (socket && !controlEnded)) return;
+    // The independent control socket must drain before a generic exit fallback.
+    result.error ??= helperExitError;
     if (!closedJob || result.status === null) {
       result.error ??= { code: "EOWNERNATIVE", message: "Windows adapter exited without Job extinction receipt" };
     }
@@ -464,7 +467,7 @@ function runWindows(command, args, options, result, observe, ready, fail, shared
     helper.once("close", (code, signal) => {
       Atomics.store(shared, 3, 0);
       if (code !== 0 || signal !== null) {
-        result.error ??= { code: "EOWNERNATIVE", message: `Windows adapter failed (${signal ?? code})` };
+        helperExitError = { code: "EOWNERNATIVE", message: `Windows adapter failed (${signal ?? code})` };
       }
       helperClosed = true;
       maybeFinish();

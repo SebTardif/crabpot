@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -23,7 +23,7 @@ test("owned command preserves synchronous results, cwd, environment, and argumen
   assert.ifError(result.error);
   assert.equal(result.status, 7);
   assert.equal(result.signal, null);
-  assert.deepEqual(JSON.parse(result.stdout), { cwd: root, env: "retained value", args });
+  assert.deepEqual(JSON.parse(result.stdout), { cwd: await realpath(root), env: "retained value", args });
   assert.equal(result.stderr, "retained stderr");
 });
 
@@ -145,9 +145,11 @@ test("Windows command preserves the native process creation error", {
   await writeFile(command, "not a Windows executable\n");
   const result = runOwnedCommand(command, ["argument"], { timeout: 1000 });
   assert.equal(result.status, null);
-  assert.equal(result.error?.code, "ENOEXEC");
-  assert.equal(result.error?.nativeCode, 193);
-  assert.equal(result.error?.operation, "CreateProcessW(JOB_LIST)");
+  assert.deepEqual({
+    code: result.error?.code,
+    nativeCode: result.error?.nativeCode,
+    operation: result.error?.operation,
+  }, { code: "ENOEXEC", nativeCode: 193, operation: "CreateProcessW(JOB_LIST)" }, result.error?.message);
   assert.equal(result.error?.path, command);
   assert.deepEqual(result.error?.spawnargs, ["argument"]);
 });
